@@ -19,5 +19,8 @@ export class CreateContactDto {
   address: string;
 
   @IsBoolean()
-  isFavorite: boolean;
+  isFavorite: boolean = false;
+
+  @IsBoolean()
+  isBlocked: boolean = false;
 }

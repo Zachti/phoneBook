@@ -6,7 +6,6 @@ import {
   Patch,
   Delete,
   Query,
-  Param,
 } from '@nestjs/common';
 import { ContactService } from './contact.service';
 import { CreateContactDto } from './dto/create-contact.dto';
@@ -52,13 +51,19 @@ export class ContactController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Query('id') id: string) {
     return this.contactService.findOneOrFail(+id);
   }
 
   @Get('favorites')
   async findAllFavorites() {
-    const favorites = await this.contactService.findAllFavorites();
+    const favorites = await this.contactService.findMarkedContacts(true);
     return { favorites, count: favorites.length };
+  }
+
+  @Get('block')
+  async findAllBlockedContacts() {
+    const blocked = await this.contactService.findMarkedContacts(false);
+    return { blocked, count: blocked.length };
   }
 }

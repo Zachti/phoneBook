@@ -118,8 +118,10 @@ export class ContactService {
     return contact;
   }
 
-  async findAllFavorites(): Promise<Contact[]> {
-    return await this.mysqlRepository.find({ where: { isFavorite: true } });
+  async findMarkedContacts(isFavorite: boolean): Promise<Contact[]> {
+    return isFavorite
+      ? await this.mysqlRepository.find({ where: { isFavorite: true } })
+      : await this.mysqlRepository.find({ where: { isBlocked: true } });
   }
 
   private paginate(contacts: Contact[], skip: number, take: number) {

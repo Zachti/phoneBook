@@ -20,4 +20,7 @@ export class Contact {
 
   @IsBoolean()
   isFavorite: boolean;
+
+  @IsBoolean()
+  isBlocked: boolean;
 }
