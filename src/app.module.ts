@@ -23,11 +23,7 @@ import { LoggerMiddleware } from './middleware/logger.middleware';
       useFactory: (mysqlCfg: ConfigType<typeof mysqlConfig>) => {
         return {
           type: 'mysql',
-          host: mysqlCfg.host,
-          port: mysqlCfg.port,
-          username: mysqlCfg.username,
-          password: mysqlCfg.password,
-          database: mysqlCfg.database,
+          url: mysqlCfg.url,
           entities: [Contact],
           synchronize: false,
         };

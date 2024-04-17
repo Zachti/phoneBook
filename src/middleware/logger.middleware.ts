@@ -6,9 +6,14 @@ export class LoggerMiddleware implements NestMiddleware {
   constructor(private readonly logger: LoggerService) {}
 
   use(req: Request, res: Response, next: NextFunction) {
+    const { method, query: queryParams, baseUrl: path, body, headers } = req;
+
     this.logger.debug(`req:`, {
-      headers: req.headers,
-      body: req.body,
+      headers,
+      queryParams,
+      body,
+      method,
+      path,
     });
     if (next) {
       next();

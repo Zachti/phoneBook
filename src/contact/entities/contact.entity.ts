@@ -8,21 +8,21 @@ export class Contact {
   @Column()
   firstName: string;
 
-  @Column()
-  lastName: string;
+  @Column({ nullable: true })
+  lastName?: string;
 
   @Column()
   phoneNumber: string;
 
-  @Column()
+  @Column({ nullable: true })
   address?: string;
 
-  @Column()
+  @Column({ nullable: true })
   isFavorite?: boolean;
 
   @Column()
   isBlocked: boolean;
 
-  @Column()
-  imageUrl?: URL;
+  @Column({ nullable: true })
+  imageUrl?: string;
 }

@@ -8,10 +8,9 @@ export class CreateContactDto {
   @ValidName()
   firstName: string;
 
-  @IsNotEmpty()
   @IsString()
   @ValidName()
-  lastName: string;
+  lastName?: string;
 
   @IsNotEmpty()
   @IsString()
@@ -25,5 +24,5 @@ export class CreateContactDto {
   isFavorite?: boolean;
 
   @IsUrl()
-  imageUrl?: URL;
+  imageUrl?: string;
 }
