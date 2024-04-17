@@ -1,5 +1,4 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
-import { IsBoolean } from 'class-validator';
 
 @Entity('contacts')
 export class Contact {
@@ -16,11 +15,14 @@ export class Contact {
   phoneNumber: string;
 
   @Column()
-  address: string;
+  address?: string;
 
-  @IsBoolean()
-  isFavorite: boolean;
+  @Column()
+  isFavorite?: boolean;
 
-  @IsBoolean()
+  @Column()
   isBlocked: boolean;
+
+  @Column()
+  imageUrl?: URL;
 }

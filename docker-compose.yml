@@ -1,7 +1,7 @@
 version: "3"
 services:
   mysql:
-    image: mysql:8
+    image: mysql
     ports:
       - '3306:3306'
     command: --default-authentication-plugin=mysql_native_password
@@ -24,7 +24,7 @@ services:
     volumes:
       - .:/home/node
       - /home/node/node_modules
-    command: sh -c "node dist/main.js"
+    command: sh -c "npm run start:dev"
     env_file:
       - 'local.env'
     depends_on:

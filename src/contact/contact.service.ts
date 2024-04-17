@@ -26,7 +26,7 @@ export class ContactService {
         .createQueryBuilder('contacts')
         .select('MAX(contacts.id)', 'max')
         .getRawOne()) + 1;
-    const contact = { id, ...createContactDto };
+    const contact = { id, ...createContactDto, isBlocked: false };
     await this.mysqlRepository.save(contact);
     this.logger.debug(`new contact created in the DBs. 
       fullName: ${contact.firstName} ${contact.lastName}`);

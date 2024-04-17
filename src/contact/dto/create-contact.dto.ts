@@ -1,4 +1,4 @@
-import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsString, IsUrl } from 'class-validator';
 import { ValidPhoneNumber } from '../validators/phoneNumber.validator';
 import { ValidName } from '../validators/name.validator';
 
@@ -18,13 +18,12 @@ export class CreateContactDto {
   @ValidPhoneNumber()
   phoneNumber: string;
 
-  @IsNotEmpty()
   @IsString()
-  address: string;
+  address?: string;
 
   @IsBoolean()
-  isFavorite: boolean = false;
+  isFavorite?: boolean;
 
-  @IsBoolean()
-  isBlocked: boolean = false;
+  @IsUrl()
+  imageUrl?: URL;
 }
