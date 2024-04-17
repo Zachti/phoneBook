@@ -1,8 +1,3 @@
-export enum DatabaseTypes {
-  MySql = 'MYSQL',
-  Mongo = 'MONGO',
-}
-
 export enum SortByTypes {
   FirstName = 'FIRST_NAME',
   LastName = 'LAST_NAME',

@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigType } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoggerModule } from './logger/logger.module';
-import { mongoConfig, mysqlConfig, validationSchema } from './config';
+import { mysqlConfig, validationSchema } from './config';
 import { ContactModule } from './contact/contact.module';
 import { Contacts } from './contact/entities/contact.entity';
 
@@ -10,7 +10,7 @@ import { Contacts } from './contact/entities/contact.entity';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [mongoConfig, mysqlConfig],
+      load: [mysqlConfig],
       validationSchema,
       validationOptions: { presence: 'required' },
     }),
@@ -25,21 +25,6 @@ import { Contacts } from './contact/entities/contact.entity';
         };
       },
       inject: [mysqlConfig.KEY],
-    }),
-    TypeOrmModule.forRootAsync({
-      name: 'mongodb',
-      useFactory: (mongoCfg: ConfigType<typeof mongoConfig>) => {
-        return {
-          type: 'mongodb',
-          host: mongoCfg.host,
-          port: mongoCfg.port,
-          database: mongoCfg.database,
-          collection: mongoCfg.collection,
-          synchronize: false,
-          entities: [Contacts],
-        };
-      },
-      inject: [mongoConfig.KEY],
     }),
     LoggerModule,
     ContactModule,

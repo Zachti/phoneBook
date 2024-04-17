@@ -6,13 +6,13 @@ import {
   Patch,
   Delete,
   Query,
+  Param,
 } from '@nestjs/common';
 import { ContactService } from './contact.service';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
 import { SearchContactDto } from './dto/search-contact.dto';
-import { DatabaseTypes, SortByTypes } from './enums/enums';
-import { DatabaseTypesValidationPipe } from './validators/databaseType.validator';
+import { SortByTypes } from './enums/enums';
 import { SortByTypeValidator } from './validators/sortBy.validator';
 
 @Controller('contact')
@@ -25,39 +25,33 @@ export class ContactController {
   }
 
   @Get()
-  findAll(
-    @Query('persistenceMethod', new DatabaseTypesValidationPipe())
-    database: DatabaseTypes,
-    @Query('sortBy', new SortByTypeValidator()) sortBy: SortByTypes,
-  ) {
-    return this.contactService.findAll(database, sortBy);
+  findAll(@Query('sortBy', new SortByTypeValidator()) sortBy: SortByTypes) {
+    return this.contactService.findAll(sortBy);
   }
 
   @Get('size')
-  async count(
-    @Query('persistenceMethod', new DatabaseTypesValidationPipe())
-    database: DatabaseTypes,
-  ) {
-    const count = await this.contactService.count(database);
+  async count() {
+    const count = await this.contactService.count();
     return { count };
   }
 
   @Get('search')
-  search(
-    @Body() searchContactDto: SearchContactDto,
-    @Query('persistenceMethod', new DatabaseTypesValidationPipe())
-    database: DatabaseTypes,
-  ) {
-    return this.contactService.search(searchContactDto, database);
+  search(@Body() searchContactDto: SearchContactDto) {
+    return this.contactService.search(searchContactDto);
   }
 
   @Patch('update')
-  update(@Body() updateContactDto: UpdateContactDto) {
-    return this.contactService.update(updateContactDto);
+  update(@Query('id') id: string, @Body() updateContactDto: UpdateContactDto) {
+    return this.contactService.update(+id, updateContactDto);
   }
 
   @Delete('delete')
-  remove(@Body() searchContactDto: SearchContactDto) {
-    return this.contactService.remove(searchContactDto);
+  remove(@Query('id') id: string) {
+    return this.contactService.remove(+id);
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.contactService.findOneOrFail(+id);
   }
 }

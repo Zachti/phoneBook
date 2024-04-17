@@ -1,8 +1,4 @@
-import {
-  NotFoundException,
-  Injectable,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { NotFoundException, Injectable, Inject } from '@nestjs/common';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
 import { SearchContactDto } from './dto/search-contact.dto';
@@ -10,51 +6,42 @@ import { Contacts } from './entities/contact.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { LoggerService } from '../logger/logger.service';
-import { DatabaseTypes, SortByTypes } from './enums/enums';
+import { SortByTypes } from './enums/enums';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
 @Injectable()
 export class ContactService {
   constructor(
-    @InjectRepository(Contacts, 'mongodb')
-    private mongoRepository: Repository<Contacts>,
     @InjectRepository(Contacts, 'mysql')
     private mysqlRepository: Repository<Contacts>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly logger: LoggerService,
   ) {}
   async create(createContactDto: CreateContactDto) {
-    try {
-      this.logger.debug(
-        `trying to create new contact: ${JSON.stringify(createContactDto)}`,
-      );
-      const newContact = await this.mysqlRepository.save(createContactDto);
-
-      await this.mongoRepository.save(createContactDto);
-
-      this.logger.debug(`new contact created in the DBs. 
-      fullName: ${newContact.firstName} ${newContact.lastName}`);
-      this.logger.info(`res: ${JSON.stringify(newContact)}`);
-      return newContact;
-    } catch (e) {
-      this.logAndThrowInternalServerException(e);
-    }
+    this.logger.debug(
+      `trying to create new contact: ${JSON.stringify(createContactDto)}`,
+    );
+    const id = await this.mysqlRepository
+      .createQueryBuilder('contacts')
+      .select('MAX(contacts.id)', 'max')
+      .getRawOne();
+    const contact = { id, ...createContactDto };
+    await this.mysqlRepository.save(contact);
+    this.logger.debug(`new contact created in the DBs. 
+      fullName: ${contact.firstName} ${contact.lastName}`);
+    this.logger.info(`res: ${JSON.stringify(contact)}`);
+    return contact;
   }
 
-  async count(database: DatabaseTypes) {
-    try {
-      const repository = this.getDbConnection(database);
+  async count() {
+    const count = await this.mysqlRepository.count();
 
-      const count = await repository.count();
-
-      this.logger.info(`The sum of contacts in ${database} DB is: ${count}`);
-      return count;
-    } catch (e) {
-      this.logAndThrowInternalServerException(e);
-    }
+    this.logger.info(`The sum of contacts in the DB is: ${count}`);
+    return count;
   }
 
-  async findAll(database: DatabaseTypes, sortBy: SortByTypes) {
-    const repository = this.getDbConnection(database);
-    const contacts = await repository.find();
+  async findAll(sortBy: SortByTypes) {
+    const contacts = await this.mysqlRepository.find();
     return sortBy
       ? contacts.sort((a, b) => {
           switch (sortBy.toUpperCase()) {
@@ -70,10 +57,9 @@ export class ContactService {
     // todo add pagination
   }
 
-  async search(searchContactDto: SearchContactDto, database: DatabaseTypes) {
+  async search(searchContactDto: SearchContactDto) {
     const { firstName, lastName } = searchContactDto;
-    const repository = this.getDbConnection(database);
-    let queryBuilder = repository.createQueryBuilder('contacts');
+    let queryBuilder = this.mysqlRepository.createQueryBuilder('contacts');
     if (firstName) {
       queryBuilder = queryBuilder.where('contact.firstName LIKE :firstName', {
         firstName: `%${firstName}%`,
@@ -89,70 +75,31 @@ export class ContactService {
     return await queryBuilder.getMany();
   }
 
-  async update(updateContactDto: UpdateContactDto) {
-    const searchParams = {
-      firstName: updateContactDto.firstName,
-      lastName: updateContactDto.lastName,
-    };
-    const contact = await this.checkIfContactExist(searchParams);
-    try {
-      await this.mysqlRepository.update(searchParams, updateContactDto);
-      await this.mongoRepository.update(searchParams, updateContactDto);
-      this.logger.debug(
-        `contact updated in the DBs. fullName: ${contact.firstName} ${contact.lastName}`,
-      );
-      return updateContactDto;
-    } catch (e) {
-      this.logAndThrowInternalServerException(e);
-    }
-  }
-
-  async remove(searchContactDto: SearchContactDto) {
-    const contact = await this.checkIfContactExist(searchContactDto);
-    try {
-      this.logger.debug(
-        `trying to delete contact ${JSON.stringify(searchContactDto)}`,
-      );
-      await this.mysqlRepository.remove(contact);
-      await this.mongoRepository.remove(contact);
-      const count = await this.mongoRepository.count();
-      this.logger.debug(
-        `The number of contacts in the DBs after contact name: ${searchContactDto.firstName} ${searchContactDto.lastName} deleted is: ${count}`,
-      );
-      return contact;
-    } catch (e) {
-      this.logAndThrowInternalServerException(e);
-    }
-  }
-
-  private getDbConnection(database: DatabaseTypes): Repository<Contacts> {
-    return database === 'MONGO' ? this.mongoRepository : this.mysqlRepository;
-  }
-
-  private logAndThrowInternalServerException(e: any) {
-    this.logger.error('Could not connect to at least one DB.');
-    throw new InternalServerErrorException(
-      'Could not connect to at least one DB.',
-      e,
+  async update(id: number, updateContactDto: UpdateContactDto) {
+    const contact = await this.findOneOrFail(id);
+    await this.mysqlRepository.update(id, updateContactDto);
+    this.logger.debug(
+      `contact updated in the DBs. fullName: ${contact.firstName} ${contact.lastName}`,
     );
+    return updateContactDto;
   }
 
-  private async checkIfContactExist(searchContactDto: SearchContactDto) {
-    const { firstName, lastName } = searchContactDto;
-    const contact = await this.mysqlRepository.findOneBy({
-      firstName,
-      lastName,
-    });
-    const mongoContact = await this.mongoRepository.findOneBy({
-      firstName,
-      lastName,
-    });
-    if (!(contact && mongoContact)) {
-      this.logger.error(
-        `Error: Contact with the name [${firstName} ${lastName}] not exists in the DB`,
-      );
+  async remove(id: number) {
+    const contact = await this.findOneOrFail(id);
+    this.logger.debug(`trying to delete contact ${JSON.stringify(contact)}`);
+    const count = await this.mysqlRepository.remove(contact);
+    this.logger.debug(
+      `The number of contacts in the DBs after contact name: ${contact.firstName} ${contact.lastName} deleted is: ${count}`,
+    );
+    return contact;
+  }
+
+  async findOneOrFail(id: number) {
+    const contact = await this.mysqlRepository.findOneByOrFail({ id });
+    if (!contact) {
+      this.logger.error(`Error: Contact with id [${id}] not exists in the DB`);
       throw new NotFoundException(
-        `Error: Contact with the name [${firstName} ${lastName}] not exists in the DB`,
+        `Error: Contact with the name [${id}] not exists in the DB`,
       );
     }
     return contact;

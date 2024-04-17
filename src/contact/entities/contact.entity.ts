@@ -3,6 +3,9 @@ import { Column, Entity, PrimaryColumn } from 'typeorm';
 @Entity('contacts')
 export class Contacts {
   @PrimaryColumn()
+  id: number;
+
+  @Column()
   firstName: string;
 
   @Column()
