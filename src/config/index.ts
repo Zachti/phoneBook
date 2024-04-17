@@ -1,3 +1,2 @@
-export * from './constants';
-export * from './mysql.config';
-export * from './redis.config';
+export { mysqlConfigObject, mysqlConfig } from './mysql.config';
+export { redisConfigObject, redisConfig } from './redis.config';

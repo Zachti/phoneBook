@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigType } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoggerModule } from './logger/logger.module';
-import { mysqlConfig, redisConfig, validationSchema } from './config';
+import { mysqlConfigObject, redisConfigObject, mysqlConfig  } from './config';
 import { ContactModule } from './contact/contact.module';
 import { Contact } from './contact/entities/contact.entity';
 import { HealthModule } from './health/health.module';
@@ -13,8 +13,11 @@ import { APP_FILTER } from '@nestjs/core';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [mysqlConfig, redisConfig],
-      validationSchema,
+      load: [mysqlConfigObject.config, redisConfigObject.config],
+      validationSchema: [mysqlConfigObject.validationSchema, redisConfigObject.validationSchema]
+        .reduce((curr, next) => {
+        return curr.concat(next)
+      }),
       validationOptions: { presence: 'required' },
     }),
     TypeOrmModule.forRootAsync({
