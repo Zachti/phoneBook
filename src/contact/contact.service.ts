@@ -9,6 +9,8 @@ import { LoggerService } from '../logger/logger.service';
 import { SortKeys } from '../commons/enums/enums';
 import { CacheService } from '../cache/cache.service';
 import { ListDto } from '../commons/dto/list.dto';
+import { listResponse } from './interfaces/listResponse.interface';
+import { paginationResponse } from './interfaces/pagination.response';
 
 @Injectable()
 export class ContactService {
@@ -42,7 +44,7 @@ export class ContactService {
     return count;
   }
 
-  async findAll(listDto: ListDto) {
+  async findAll(listDto: ListDto): Promise<paginationResponse> {
     const { skip, take, order } = listDto;
     const contacts = await this.mysqlRepository.find();
     const sortedContacts = order
@@ -61,7 +63,7 @@ export class ContactService {
     return this.paginate(sortedContacts, skip, take);
   }
 
-  async search(searchContactDto: SearchContactDto): Promise<Contact[]> {
+  async search(searchContactDto: SearchContactDto): Promise<listResponse> {
     const { firstName, lastName } = searchContactDto;
     let queryBuilder = this.mysqlRepository.createQueryBuilder('contacts');
     if (firstName) {
@@ -76,7 +78,8 @@ export class ContactService {
       });
     }
 
-    return await queryBuilder.getMany();
+    const contacts = await queryBuilder.getMany();
+    return { contacts, count: contacts.length };
   }
 
   async update(
@@ -118,13 +121,18 @@ export class ContactService {
     return contact;
   }
 
-  async findMarkedContacts(isFavorite: boolean): Promise<Contact[]> {
-    return isFavorite
+  async findMarkedContacts(isFavorite: boolean): Promise<listResponse> {
+    const contacts = isFavorite
       ? await this.mysqlRepository.find({ where: { isFavorite: true } })
       : await this.mysqlRepository.find({ where: { isBlocked: true } });
+    return { contacts, count: contacts.length };
   }
 
-  private paginate(contacts: Contact[], skip: number, take: number) {
+  private paginate(
+    contacts: Contact[],
+    skip: number,
+    take: number,
+  ): paginationResponse {
     const totalContacts = contacts.length;
     const totalPages = Math.ceil(totalContacts / take);
 
@@ -137,6 +145,6 @@ export class ContactService {
       paginatedContacts.push(pageContacts);
     }
 
-    return { contacts: paginatedContacts, totalPages };
+    return { paginatedContacts, totalPages };
   }
 }
