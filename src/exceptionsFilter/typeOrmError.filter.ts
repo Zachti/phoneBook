@@ -17,8 +17,11 @@ export class TypeOrmExceptionFilter implements ExceptionFilter {
 
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
+    const errorMessage = exception.message.startsWith('ER_')
+      ? exception.message.split(':')[1].trim()
+      : exception.message;
     response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-      errorMessage: exception.message,
+      errorMessage,
       errorCode: (exception as any).code,
     });
   }

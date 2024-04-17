@@ -1,19 +1,18 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
+import { Injectable, NestMiddleware, Logger } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import { LoggerService } from '../logger/logger.service';
+import { PhoneBookModule } from '../app.module';
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
-  constructor(private readonly logger: LoggerService) {}
-
+  private readonly logger = new Logger(PhoneBookModule.name);
   use(req: Request, res: Response, next: NextFunction) {
-    const { method, query: queryParams, baseUrl: path, body, headers } = req;
+    const { method, query: queryParams, baseUrl: path, body } = req;
 
-    this.logger.debug(`req:`, {
-      headers,
+    this.logger.debug(`new request`, {
       queryParams,
       body,
       method,
       path,
+      timestamp: new Date().toDateString(),
     });
     if (next) {
       next();

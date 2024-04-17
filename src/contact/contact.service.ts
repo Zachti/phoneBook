@@ -7,7 +7,8 @@ import { LoggerService } from '../logger/logger.service';
 import { SortKeys, SortType } from '../commons/enums/enums';
 import { CacheService } from '../cache/cache.service';
 import { ListDto } from '../commons/dto/list.dto';
-import { listResponse, paginationResponseInterface } from './interfaces';
+import { paginationResponse } from './interfaces';
+import { SortInput } from '../commons/dto/sort.dto';
 
 @Injectable()
 export class ContactService {
@@ -21,13 +22,10 @@ export class ContactService {
     this.logger.debug(
       `trying to create new contact: ${JSON.stringify(createContactDto)}`,
     );
-    const id =
-      (await this.mysqlRepository
-        .createQueryBuilder('contacts')
-        .select('MAX(contacts.id)', 'max')
-        .getRawOne()) + 1;
-    const contact = { id, ...createContactDto, isBlocked: false };
-    await this.mysqlRepository.save(contact);
+    const contact = await this.mysqlRepository.save({
+      ...createContactDto,
+      isBlocked: false,
+    });
     this.logger.debug(`new contact created in the DB. 
       fullName: ${contact.firstName} ${contact.lastName}`);
     this.logger.info(`res: ${JSON.stringify(contact)}`);
@@ -41,28 +39,18 @@ export class ContactService {
     return count;
   }
 
-  async findAll(listDto: ListDto): Promise<paginationResponseInterface> {
+  async findAll(listDto: ListDto): Promise<paginationResponse> {
     const { skip, take, order } = listDto;
     const contacts = await this.mysqlRepository.find();
-    const sortedContacts = order
-      ? contacts.sort((a, b) => {
-          switch (order.key.toUpperCase()) {
-            case SortKeys.FirstName:
-              return a.firstName.localeCompare(b.firstName);
-            case SortKeys.LastName:
-              return a.lastName.localeCompare(b.lastName);
-            case SortKeys.Id:
-              return a.id - b.id;
-          }
-        })
-      : contacts.sort((a, b) => a.firstName.localeCompare(b.firstName));
-
-    order?.type === SortType.desc ? sortedContacts.reverse() : sortedContacts;
-
+    const sortedContacts = this.orderBy(contacts, order);
     return this.paginate(sortedContacts, skip, take);
   }
 
-  async search(searchContactDto: SearchContactDto): Promise<listResponse> {
+  async search(
+    searchContactDto: SearchContactDto,
+    listDto: ListDto,
+  ): Promise<paginationResponse> {
+    const { skip, take, order } = listDto;
     const { firstName, lastName } = searchContactDto;
     let queryBuilder = this.mysqlRepository.createQueryBuilder('contacts');
     if (firstName) {
@@ -76,9 +64,9 @@ export class ContactService {
         lastName: `%${lastName}%`,
       });
     }
-
     const contacts = await queryBuilder.getMany();
-    return { contacts, count: contacts.length };
+    const sortedContacts = this.orderBy(contacts, order);
+    return this.paginate(sortedContacts, skip, take);
   }
 
   async update(
@@ -125,18 +113,23 @@ export class ContactService {
     return contact;
   }
 
-  async findMarkedContacts(isFavorite: boolean): Promise<listResponse> {
+  async findMarkedContacts(
+    isFavorite: boolean,
+    listDto: ListDto,
+  ): Promise<paginationResponse> {
+    const { skip, take, order } = listDto;
     const contacts = isFavorite
       ? await this.mysqlRepository.find({ where: { isFavorite: true } })
       : await this.mysqlRepository.find({ where: { isBlocked: true } });
-    return { contacts, count: contacts.length };
+    const sortedContacts = this.orderBy(contacts, order);
+    return this.paginate(sortedContacts, skip, take);
   }
 
   private paginate(
     contacts: Contact[],
     skip: number,
     take: number,
-  ): paginationResponseInterface {
+  ): paginationResponse {
     const totalContacts = contacts.length;
     const totalPages = Math.ceil(totalContacts / take);
 
@@ -149,6 +142,24 @@ export class ContactService {
       paginatedContacts.push(pageContacts);
     }
 
-    return { paginatedContacts, totalPages };
+    return { paginatedContacts, totalPages, totalContacts };
+  }
+
+  private orderBy(contacts: Contact[], sort: SortInput): Contact[] {
+    const sortedContacts = sort
+      ? contacts.sort((a, b) => {
+          switch (sort.key.toUpperCase()) {
+            case SortKeys.FirstName:
+              return a.firstName.localeCompare(b.firstName);
+            case SortKeys.LastName:
+              return a.lastName.localeCompare(b.lastName);
+            case SortKeys.Id:
+              return a.id - b.id;
+          }
+        })
+      : contacts.sort((a, b) => a.firstName.localeCompare(b.firstName));
+
+    sort?.type === SortType.desc ? sortedContacts.reverse() : sortedContacts;
+    return sortedContacts;
   }
 }

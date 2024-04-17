@@ -1,6 +1,7 @@
 import { Contact } from '../entities/contact.entity';
 
-export interface paginationResponseInterface {
+export interface paginationResponse {
   paginatedContacts: Contact[][];
   totalPages: number;
+  totalContacts: number;
 }

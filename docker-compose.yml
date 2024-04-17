@@ -15,7 +15,7 @@ services:
     command: redis-server --requirepass root
   phonebook:
     ports:
-      - '3001:3001'
+      - '3000:3000'
     build:
       context: './'
       dockerfile: 'dockerfile'

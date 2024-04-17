@@ -11,7 +11,7 @@ import { ContactService } from './contact.service';
 import { CreateContactDto, UpdateContactDto, SearchContactDto } from './dto';
 import { SortByTypeValidator } from '../commons/validators/sortBy.validator';
 import { ListDto } from '../commons/dto/list.dto';
-import { listResponse, paginationResponseInterface } from './interfaces';
+import { paginationResponse } from './interfaces';
 import { Contact } from './entities/contact.entity';
 
 @Controller('contact')
@@ -26,7 +26,7 @@ export class ContactController {
   @Get()
   async findAll(
     @Body(new SortByTypeValidator()) listDto: ListDto,
-  ): Promise<paginationResponseInterface> {
+  ): Promise<paginationResponse> {
     return await this.contactService.findAll(listDto);
   }
 
@@ -39,8 +39,9 @@ export class ContactController {
   @Get('search')
   async search(
     @Body() searchContactDto: SearchContactDto,
-  ): Promise<listResponse> {
-    return await this.contactService.search(searchContactDto);
+    @Body(new SortByTypeValidator()) listDto: ListDto,
+  ): Promise<paginationResponse> {
+    return await this.contactService.search(searchContactDto, listDto);
   }
 
   @Patch('update')
@@ -62,12 +63,16 @@ export class ContactController {
   }
 
   @Get('favorites')
-  async findAllFavorites(): Promise<listResponse> {
-    return await this.contactService.findMarkedContacts(true);
+  async findAllFavorites(
+    @Body(new SortByTypeValidator()) listDto: ListDto,
+  ): Promise<paginationResponse> {
+    return await this.contactService.findMarkedContacts(true, listDto);
   }
 
   @Get('block')
-  async findAllBlockedContacts(): Promise<listResponse> {
-    return await this.contactService.findMarkedContacts(false);
+  async findAllBlockedContacts(
+    @Body(new SortByTypeValidator()) listDto: ListDto,
+  ): Promise<paginationResponse> {
+    return await this.contactService.findMarkedContacts(false, listDto);
   }
 }
