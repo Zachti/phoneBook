@@ -25,8 +25,11 @@ export class ContactController {
   }
 
   @Get()
-  findAll(@Query('sortBy', new SortByTypeValidator()) sortBy: SortByTypes) {
-    return this.contactService.findAll(sortBy);
+  async findAll(
+    @Query('sortBy', new SortByTypeValidator()) sortBy: SortByTypes,
+  ) {
+    const contacts = await this.contactService.findAll(sortBy);
+    return { contacts, count: contacts.length };
   }
 
   @Get('size')
@@ -36,8 +39,9 @@ export class ContactController {
   }
 
   @Get('search')
-  search(@Body() searchContactDto: SearchContactDto) {
-    return this.contactService.search(searchContactDto);
+  async search(@Body() searchContactDto: SearchContactDto) {
+    const contacts = await this.contactService.search(searchContactDto);
+    return { contacts, count: contacts.length };
   }
 
   @Patch('update')
@@ -53,5 +57,11 @@ export class ContactController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.contactService.findOneOrFail(+id);
+  }
+
+  @Get('favorites')
+  async findAllFavorites() {
+    const favorites = await this.contactService.findAllFavorites();
+    return { favorites, count: favorites.length };
   }
 }

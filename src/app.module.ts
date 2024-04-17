@@ -5,6 +5,7 @@ import { LoggerModule } from './logger/logger.module';
 import { mysqlConfig, redisConfig, validationSchema } from './config';
 import { ContactModule } from './contact/contact.module';
 import { Contact } from './contact/entities/contact.entity';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { Contact } from './contact/entities/contact.entity';
     }),
     LoggerModule,
     ContactModule,
+    HealthModule,
   ],
 })
 export class AppModule {}

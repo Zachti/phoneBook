@@ -114,4 +114,8 @@ export class ContactService {
     await this.cacheManager.set(key, contact);
     return contact;
   }
+
+  async findAllFavorites(): Promise<Contact[]> {
+    return await this.mysqlRepository.find({ where: { isFavorite: true } });
+  }
 }
