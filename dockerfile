@@ -1,4 +1,4 @@
-FROM node:18.16.1-alpine as build
+FROM node:18.16.1-alpine as builder
 
 WORKDIR /tmp/
 
