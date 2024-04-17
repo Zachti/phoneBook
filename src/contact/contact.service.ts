@@ -6,7 +6,7 @@ import { Contact } from './entities/contact.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { LoggerService } from '../logger/logger.service';
-import { SortKeys } from '../commons/enums/enums';
+import { SortKeys, SortType } from '../commons/enums/enums';
 import { CacheService } from '../cache/cache.service';
 import { ListDto } from '../commons/dto/list.dto';
 import { listResponse } from './interfaces/listResponse.interface';
@@ -59,6 +59,8 @@ export class ContactService {
           }
         })
       : contacts.sort((a, b) => a.firstName.localeCompare(b.firstName));
+
+    order?.type === SortType.desc ? sortedContacts.reverse() : sortedContacts;
 
     return this.paginate(sortedContacts, skip, take);
   }
