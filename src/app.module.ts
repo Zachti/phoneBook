@@ -5,12 +5,13 @@ import { LoggerModule } from './logger/logger.module';
 import { mysqlConfig, validationSchema } from './config';
 import { ContactModule } from './contact/contact.module';
 import { Contacts } from './contact/entities/contact.entity';
+import { redisConfig } from './config/redis.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [mysqlConfig],
+      load: [mysqlConfig, redisConfig],
       validationSchema,
       validationOptions: { presence: 'required' },
     }),

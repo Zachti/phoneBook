@@ -1,3 +1,5 @@
-import { postgresConfigValidationSchema } from './mysql.config';
+import { mysqlConfigValidationSchema } from './mysql.config';
+import { redisConfigValidationSchema } from './redis.config';
 
-export const validationSchema = postgresConfigValidationSchema;
+export const validationSchema =
+  mysqlConfigValidationSchema && redisConfigValidationSchema;

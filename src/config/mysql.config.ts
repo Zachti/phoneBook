@@ -5,6 +5,6 @@ export const mysqlConfig = registerAs('mysql', () => ({
   url: process.env.MYSQL_URL,
 }));
 
-export const postgresConfigValidationSchema = Joi.object({
+export const mysqlConfigValidationSchema = Joi.object({
   MYSQL_URL: Joi.string().uri().required(),
 });
