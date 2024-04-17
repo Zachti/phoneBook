@@ -6,7 +6,7 @@ import {
   ValidatorConstraintInterface,
 } from 'class-validator';
 
-@ValidatorConstraint({ name: 'dateNotInPast', async: false })
+@ValidatorConstraint({ name: 'ValidPhoneNumber', async: false })
 export class ValidatePhoneNumberConstraint
   implements ValidatorConstraintInterface
 {
