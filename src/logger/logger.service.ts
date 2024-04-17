@@ -1,15 +1,24 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import * as winston from 'winston';
 import { LogLevel } from './enums/enums';
+import { ConfigType } from '@nestjs/config';
+import { commonConfig } from '../config';
 
 @Injectable()
 export class LoggerService {
   private readonly _logger: winston.Logger;
 
-  constructor() {
+  constructor(
+    @Inject(commonConfig.KEY)
+    private readonly config: ConfigType<typeof commonConfig>,
+  ) {
     this._logger = winston.createLogger({
+      defaultMeta: {
+        serviceName: 'phone-book',
+        environment: this.config.nodeEnv,
+      },
       format: this.createFormat(),
-      level: LogLevel.Info,
+      level: this.config.logLevel,
       levels: Object.fromEntries(
         Object.entries(LogLevel).map(([key, value], index) => [value, index]),
       ),

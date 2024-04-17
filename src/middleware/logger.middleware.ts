@@ -7,7 +7,7 @@ export class LoggerMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
     const { method, query: queryParams, baseUrl: path, body } = req;
 
-    this.logger.debug(`new request`, {
+    this.logger.log(`new request`, {
       queryParams,
       body,
       method,
