@@ -1,4 +1,5 @@
 import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
+import { ValidPhoneNumber } from '../validators/phoneNumber.validator';
 
 export class CreateContactDto {
   @IsNotEmpty()
@@ -11,7 +12,7 @@ export class CreateContactDto {
 
   @IsNotEmpty()
   @IsString()
-  // todo isValidPhoneNumber
+  @ValidPhoneNumber()
   phoneNumber: string;
 
   @IsNotEmpty()
