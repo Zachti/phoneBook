@@ -2,7 +2,7 @@ import { NotFoundException, Injectable } from '@nestjs/common';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
 import { SearchContactDto } from './dto/search-contact.dto';
-import { Contacts } from './entities/contact.entity';
+import { Contact } from './entities/contact.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { LoggerService } from '../logger/logger.service';
@@ -12,12 +12,12 @@ import { CacheService } from '../cache/cache.service';
 @Injectable()
 export class ContactService {
   constructor(
-    @InjectRepository(Contacts, 'mysql')
-    private mysqlRepository: Repository<Contacts>,
-    private readonly cacheManager: CacheService<Contacts>,
+    @InjectRepository(Contact, 'mysql')
+    private mysqlRepository: Repository<Contact>,
+    private readonly cacheManager: CacheService<Contact>,
     private readonly logger: LoggerService,
   ) {}
-  async create(createContactDto: CreateContactDto): Promise<Contacts> {
+  async create(createContactDto: CreateContactDto): Promise<Contact> {
     this.logger.debug(
       `trying to create new contact: ${JSON.stringify(createContactDto)}`,
     );
@@ -40,7 +40,7 @@ export class ContactService {
     return count;
   }
 
-  async findAll(sortBy: SortByTypes): Promise<Contacts[]> {
+  async findAll(sortBy: SortByTypes): Promise<Contact[]> {
     const contacts = await this.mysqlRepository.find();
     return sortBy
       ? contacts.sort((a, b) => {
@@ -57,7 +57,7 @@ export class ContactService {
     // todo add pagination
   }
 
-  async search(searchContactDto: SearchContactDto): Promise<Contacts[]> {
+  async search(searchContactDto: SearchContactDto): Promise<Contact[]> {
     const { firstName, lastName } = searchContactDto;
     let queryBuilder = this.mysqlRepository.createQueryBuilder('contacts');
     if (firstName) {
@@ -81,23 +81,25 @@ export class ContactService {
   ): Promise<UpdateContactDto> {
     const contact = await this.findOneOrFail(id);
     await this.mysqlRepository.update(id, updateContactDto);
+    await this.cacheManager.remove(`${id}`);
     this.logger.debug(
       `contact updated in the DBs. fullName: ${contact.firstName} ${contact.lastName}`,
     );
     return updateContactDto;
   }
 
-  async remove(id: number): Promise<Contacts> {
+  async remove(id: number): Promise<Contact> {
     const contact = await this.findOneOrFail(id);
     this.logger.debug(`trying to delete contact ${JSON.stringify(contact)}`);
     const count = await this.mysqlRepository.remove(contact);
+    await this.cacheManager.remove(`${id}`);
     this.logger.debug(
       `The number of contacts in the DBs after contact name: ${contact.firstName} ${contact.lastName} deleted is: ${count}`,
     );
     return contact;
   }
 
-  async findOneOrFail(id: number): Promise<Contacts> {
+  async findOneOrFail(id: number): Promise<Contact> {
     const key = `${id}`;
     const value = await this.cacheManager.get(key);
     if (value) return value;

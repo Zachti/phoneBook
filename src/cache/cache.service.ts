@@ -14,9 +14,15 @@ export class CacheService<T> {
     return this.cacheManager.get(key);
   }
 
-  set(key: string, value: T, logger = this.loggerService): Promise<void> {
+  async set(key: string, value: T, logger = this.loggerService): Promise<void> {
     return this.cacheManager.set(key, value).then(() => {
       logger.debug('value cached', { key, value });
+    });
+  }
+
+  async remove(key: string, logger = this.loggerService): Promise<void> {
+    return this.cacheManager.del(key).then(() => {
+      logger.debug('value removed', { key });
     });
   }
 }

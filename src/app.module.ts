@@ -4,7 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoggerModule } from './logger/logger.module';
 import { mysqlConfig, validationSchema } from './config';
 import { ContactModule } from './contact/contact.module';
-import { Contacts } from './contact/entities/contact.entity';
+import { Contact } from './contact/entities/contact.entity';
 import { redisConfig } from './config/redis.config';
 
 @Module({
@@ -21,7 +21,7 @@ import { redisConfig } from './config/redis.config';
         return {
           type: 'mysql',
           url: mysqlCfg.url,
-          entities: [Contacts],
+          entities: [Contact],
           synchronize: false,
         };
       },
