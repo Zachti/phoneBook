@@ -22,7 +22,11 @@ import { APP_FILTER } from '@nestjs/core';
       useFactory: (mysqlCfg: ConfigType<typeof mysqlConfig>) => {
         return {
           type: 'mysql',
-          url: mysqlCfg.url,
+          host: mysqlCfg.host,
+          port: mysqlCfg.port,
+          username: mysqlCfg.username,
+          password: mysqlCfg.password,
+          database: mysqlCfg.database,
           entities: [Contact],
           synchronize: false,
         };
