@@ -9,6 +9,6 @@ export const redisConfig = registerAs('redis', () => ({
 
 export const redisConfigValidationSchema = Joi.object({
   REDIS_HOST: Joi.string().required(),
-  CACHE_TTL: Joi.number().required(),
-  REDIS_PORT: Joi.number().required(),
+  CACHE_TTL: Joi.string().required(),
+  REDIS_PORT: Joi.string().required(),
 });
