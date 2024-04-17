@@ -1,7 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { ContactService } from './contact.service';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
+import { SearchContactDto } from './dto/search-contact.dto';
+import { DatabaseTypes, SortByTypes } from './enums/enums';
+import { DatabaseTypesValidationPipe } from './validators/databaseType.validator';
+import { SortByTypeValidator } from './validators/sortBy.validator';
 
 @Controller('contact')
 export class ContactController {
@@ -13,22 +25,39 @@ export class ContactController {
   }
 
   @Get()
-  findAll() {
-    return this.contactService.findAll();
+  findAll(
+    @Query('persistenceMethod', new DatabaseTypesValidationPipe())
+    database: DatabaseTypes,
+    @Query('sortBy', new SortByTypeValidator()) sortBy: SortByTypes,
+  ) {
+    return this.contactService.findAll(database, sortBy);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.contactService.findOne(+id);
+  @Get('size')
+  async count(
+    @Query('persistenceMethod', new DatabaseTypesValidationPipe())
+    database: DatabaseTypes,
+  ) {
+    const count = await this.contactService.count(database);
+    return { count };
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateContactDto: UpdateContactDto) {
-    return this.contactService.update(+id, updateContactDto);
+  @Get('search')
+  search(
+    @Body() searchContactDto: SearchContactDto,
+    @Query('persistenceMethod', new DatabaseTypesValidationPipe())
+    database: DatabaseTypes,
+  ) {
+    return this.contactService.search(searchContactDto, database);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.contactService.remove(+id);
+  @Patch('update')
+  update(@Body() updateContactDto: UpdateContactDto) {
+    return this.contactService.update(updateContactDto);
+  }
+
+  @Delete('delete')
+  remove(@Body() searchContactDto: SearchContactDto) {
+    return this.contactService.remove(searchContactDto);
   }
 }

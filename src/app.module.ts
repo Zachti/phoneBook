@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoggerModule } from './logger/logger.module';
 import { mongoConfig, mysqlConfig, validationSchema } from './config';
 import { ContactModule } from './contact/contact.module';
+import { Contacts } from './contact/entities/contact.entity';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { ContactModule } from './contact/contact.module';
         return {
           type: 'mysql',
           url: mysqlCfg.url,
-          entities: [Contact],
+          entities: [Contacts],
           synchronize: false,
         };
       },
@@ -35,7 +36,7 @@ import { ContactModule } from './contact/contact.module';
           database: mongoCfg.database,
           collection: mongoCfg.collection,
           synchronize: false,
-          entities: [MongoTodo],
+          entities: [Contacts],
         };
       },
       inject: [mongoConfig.KEY],
