@@ -85,11 +85,11 @@ export class ContactService {
     id: number,
     updateContactDto: UpdateContactDto,
   ): Promise<UpdateContactDto> {
-    const contact = await this.findOneOrFail(id);
-    await this.mysqlRepository.update(id, updateContactDto);
-    await this.cacheManager.remove(`${id}`);
+    await this.findOneOrFail(id);
+    const updatedContact = await this.mysqlRepository.save(updateContactDto);
+    await this.cacheManager.update(`${id}`, updatedContact);
     this.logger.debug(
-      `contact updated in the DBs. fullName: ${contact.firstName} ${contact.lastName}`,
+      `contact updated in the DBs. fullName: ${updatedContact.firstName} ${updatedContact.lastName}`,
     );
     return updateContactDto;
   }
@@ -109,7 +109,7 @@ export class ContactService {
     const key = `${id}`;
     const value = await this.cacheManager.get(key);
     if (value) return value;
-    const contact = await this.mysqlRepository.findOneByOrFail({ id });
+    const contact = await this.mysqlRepository.findOneBy({ id });
     if (!contact) {
       this.logger.error(
         `Error: Contact with id [${id}] does not exists in the DB`,
