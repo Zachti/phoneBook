@@ -114,9 +114,11 @@ export class ContactService {
     if (value) return value;
     const contact = await this.mysqlRepository.findOneByOrFail({ id });
     if (!contact) {
-      this.logger.error(`Error: Contact with id [${id}] not exists in the DB`);
+      this.logger.error(
+        `Error: Contact with id [${id}] does not exists in the DB`,
+      );
       throw new NotFoundException(
-        `Error: Contact with the name [${id}] not exists in the DB`,
+        `Error: Contact with the id [${id}] does not exists in the DB`,
       );
     }
     await this.cacheManager.set(key, contact);
