@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigType } from '@nestjs/config';
+import { ConfigType } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoggerModule } from './logger/logger.module';
 import { mysqlConfigObject, redisConfigObject, mysqlConfig } from './config';
@@ -8,18 +8,13 @@ import { Contact } from './contact/entities/contact.entity';
 import { HealthModule } from './health/health.module';
 import { TypeOrmExceptionFilter } from './exceptionsFilter/typeOrmError.filter';
 import { APP_FILTER } from '@nestjs/core';
+import { ConfigCoreModule } from './config/config.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
+    ConfigCoreModule.forRoot({
       isGlobal: true,
-      load: [mysqlConfigObject.config, redisConfigObject.config],
-      validationSchema: [
-        mysqlConfigObject.validationSchema,
-        redisConfigObject.validationSchema,
-      ].reduce((curr, next) => {
-        return curr.concat(next);
-      }),
+      configObjects: [mysqlConfigObject, redisConfigObject],
       validationOptions: { presence: 'required' },
     }),
     TypeOrmModule.forRootAsync({

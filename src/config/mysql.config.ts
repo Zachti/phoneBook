@@ -1,13 +1,13 @@
 import { registerAs } from '@nestjs/config';
 import * as Joi from 'joi';
-import { ConfigObject } from './configObject.interface';
+import { ConfigObject } from './config-module-options';
 
 export const mysqlConfig = registerAs('mysql', () => ({
   host: process.env.DATABASE_HOST,
   username: process.env.DATABASE_USERNAME,
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE_DB_NAME,
-  port: Number(process.env.DATABASE_PORT)
+  port: Number(process.env.DATABASE_PORT),
 }));
 
 const mysqlConfigValidationSchema = Joi.object({
@@ -21,4 +21,4 @@ const mysqlConfigValidationSchema = Joi.object({
 export const mysqlConfigObject: ConfigObject = {
   config: mysqlConfig,
   validationSchema: mysqlConfigValidationSchema,
-}
+};

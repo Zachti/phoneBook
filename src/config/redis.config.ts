@@ -1,6 +1,6 @@
 import { registerAs } from '@nestjs/config';
 import * as Joi from 'joi';
-import { ConfigObject } from './configObject.interface';
+import { ConfigObject } from './config-module-options';
 
 export const redisConfig = registerAs('redis', () => ({
   host: process.env.REDIS_HOST,
@@ -17,4 +17,4 @@ const redisConfigValidationSchema = Joi.object({
 export const redisConfigObject: ConfigObject = {
   config: redisConfig,
   validationSchema: redisConfigValidationSchema,
-}
+};
