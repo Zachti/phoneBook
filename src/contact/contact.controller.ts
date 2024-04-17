@@ -8,14 +8,11 @@ import {
   Query,
 } from '@nestjs/common';
 import { ContactService } from './contact.service';
-import { CreateContactDto } from './dto/create-contact.dto';
-import { UpdateContactDto } from './dto/update-contact.dto';
-import { SearchContactDto } from './dto/search-contact.dto';
+import { CreateContactDto, UpdateContactDto, SearchContactDto } from './dto';
 import { SortByTypeValidator } from '../commons/validators/sortBy.validator';
 import { ListDto } from '../commons/dto/list.dto';
-import { listResponse } from './interfaces/listResponse.interface';
+import { listResponse, paginationResponseInterface } from './interfaces';
 import { Contact } from './entities/contact.entity';
-import { paginationResponse } from './interfaces/pagination.response';
 
 @Controller('contact')
 export class ContactController {
@@ -29,7 +26,7 @@ export class ContactController {
   @Get()
   async findAll(
     @Body(new SortByTypeValidator()) listDto: ListDto,
-  ): Promise<paginationResponse> {
+  ): Promise<paginationResponseInterface> {
     return await this.contactService.findAll(listDto);
   }
 

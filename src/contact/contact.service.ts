@@ -1,7 +1,5 @@
 import { NotFoundException, Injectable } from '@nestjs/common';
-import { CreateContactDto } from './dto/create-contact.dto';
-import { UpdateContactDto } from './dto/update-contact.dto';
-import { SearchContactDto } from './dto/search-contact.dto';
+import { CreateContactDto, UpdateContactDto, SearchContactDto } from './dto';
 import { Contact } from './entities/contact.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -9,8 +7,7 @@ import { LoggerService } from '../logger/logger.service';
 import { SortKeys, SortType } from '../commons/enums/enums';
 import { CacheService } from '../cache/cache.service';
 import { ListDto } from '../commons/dto/list.dto';
-import { listResponse } from './interfaces/listResponse.interface';
-import { paginationResponse } from './interfaces/pagination.response';
+import { listResponse, paginationResponseInterface } from './interfaces';
 
 @Injectable()
 export class ContactService {
@@ -44,7 +41,7 @@ export class ContactService {
     return count;
   }
 
-  async findAll(listDto: ListDto): Promise<paginationResponse> {
+  async findAll(listDto: ListDto): Promise<paginationResponseInterface> {
     const { skip, take, order } = listDto;
     const contacts = await this.mysqlRepository.find();
     const sortedContacts = order
@@ -136,7 +133,7 @@ export class ContactService {
     contacts: Contact[],
     skip: number,
     take: number,
-  ): paginationResponse {
+  ): paginationResponseInterface {
     const totalContacts = contacts.length;
     const totalPages = Math.ceil(totalContacts / take);
 
