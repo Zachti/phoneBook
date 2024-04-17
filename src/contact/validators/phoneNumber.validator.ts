@@ -10,21 +10,15 @@ import {
 export class ValidatePhoneNumberConstraint
   implements ValidatorConstraintInterface
 {
-  validate(value: number): boolean {
-    if (!value) {
-      throw new BadRequestException('Phone number is required.');
-    }
-
-    const phoneNumber = value.toString();
-
-    if (phoneNumber.startsWith('+')) {
-      if (phoneNumber.length !== 13) {
+  validate(value: string): boolean {
+    if (value.startsWith('+')) {
+      if (value.length !== 13) {
         throw new BadRequestException(
           'Phone number starting with "+" should be 13 characters long.',
         );
       }
-    } else if (phoneNumber.startsWith('0')) {
-      if (phoneNumber.length !== 10) {
+    } else if (value.startsWith('0')) {
+      if (value.length !== 10) {
         throw new BadRequestException(
           'Phone number starting with "0" should be 10 characters long.',
         );
