@@ -15,7 +15,7 @@ services:
     build:
       context: './'
       dockerfile: 'dockerfile'
-      target: 'builder' # build only the first stage of the dockerfile - named "build"
+      target: 'builder'
     restart: 'unless-stopped'
     volumes:
       - .:/home/node
