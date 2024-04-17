@@ -6,6 +6,8 @@ import { mysqlConfig, redisConfig, validationSchema } from './config';
 import { ContactModule } from './contact/contact.module';
 import { Contact } from './contact/entities/contact.entity';
 import { HealthModule } from './health/health.module';
+import { TypeOrmExceptionFilter } from './exceptionsFilter/typeOrmError.filter';
+import { APP_FILTER } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -30,6 +32,12 @@ import { HealthModule } from './health/health.module';
     LoggerModule,
     ContactModule,
     HealthModule,
+  ],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: TypeOrmExceptionFilter,
+    },
   ],
 })
 export class AppModule {}
