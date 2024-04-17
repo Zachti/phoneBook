@@ -14,18 +14,15 @@ services:
       - '3001:3001'
     build:
       context: './'
-      dockerfile: 'apps/wolverine/wolverine-api/Dockerfile'
+      dockerfile: 'dockerfile'
       target: 'builder' # build only the first stage of the dockerfile - named "build"
     restart: 'unless-stopped'
     volumes:
       - .:/home/node
       - /home/node/node_modules
-    command: sh -c "npm run seed:wolverine-api && npm run start:wolverine-api:dev"
-    networks:
-      - nexus_network
+    command: sh -c "node dist/main.js"
     env_file:
-      - 'development/local-base.env'
-      - 'apps/wolverine/wolverine-api/development/local.env'
+      - 'local.env'
     depends_on:
       - mysql
       - redis
