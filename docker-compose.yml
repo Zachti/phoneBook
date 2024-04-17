@@ -9,7 +9,7 @@ services:
     ports:
       - '6379:6379'
     command: redis-server --requirepass root
-  phoneBook:
+  phonebook:
     ports:
       - '3001:3001'
     build:

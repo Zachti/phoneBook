@@ -10,7 +10,7 @@ COPY . .
 
 RUN npm run build
 
-FROM node:18.16.1-alpine as phoneBook
+FROM node:18.16.1-alpine as phonebook
 
 WORKDIR /app/
 
