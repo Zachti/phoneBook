@@ -2,10 +2,9 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigType } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoggerModule } from './logger/logger.module';
-import { mysqlConfig, validationSchema } from './config';
+import { mysqlConfig, redisConfig, validationSchema } from './config';
 import { ContactModule } from './contact/contact.module';
 import { Contact } from './contact/entities/contact.entity';
-import { redisConfig } from './config/redis.config';
 
 @Module({
   imports: [

@@ -21,10 +21,11 @@ export class ContactService {
     this.logger.debug(
       `trying to create new contact: ${JSON.stringify(createContactDto)}`,
     );
-    const id = await this.mysqlRepository
-      .createQueryBuilder('contacts')
-      .select('MAX(contacts.id)', 'max')
-      .getRawOne();
+    const id =
+      (await this.mysqlRepository
+        .createQueryBuilder('contacts')
+        .select('MAX(contacts.id)', 'max')
+        .getRawOne()) + 1;
     const contact = { id, ...createContactDto };
     await this.mysqlRepository.save(contact);
     this.logger.debug(`new contact created in the DBs. 
@@ -49,8 +50,8 @@ export class ContactService {
               return a.firstName.localeCompare(b.firstName);
             case SortByTypes.LastName:
               return a.lastName.localeCompare(b.lastName);
-            case SortByTypes.PhoneNumber:
-              return a.phoneNumber.localeCompare(b.phoneNumber);
+            case SortByTypes.Id:
+              return a.id - b.id;
           }
         })
       : contacts.sort((a, b) => a.firstName.localeCompare(b.firstName));
