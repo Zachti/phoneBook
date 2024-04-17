@@ -9,6 +9,8 @@ import {
 @ValidatorConstraint({ name: 'ValidName', async: false })
 export class ValidateNameConstraint implements ValidatorConstraintInterface {
   validate(value: string): boolean {
+    if (!value) return true;
+
     const regex = /^[a-zA-Z\s']+$/;
 
     if (!regex.test(value)) {
