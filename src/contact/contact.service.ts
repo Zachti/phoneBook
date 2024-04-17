@@ -6,8 +6,9 @@ import { Contact } from './entities/contact.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { LoggerService } from '../logger/logger.service';
-import { SortByTypes } from './enums/enums';
+import { SortKeys } from '../commons/enums/enums';
 import { CacheService } from '../cache/cache.service';
+import { ListDto } from '../commons/dto/list.dto';
 
 @Injectable()
 export class ContactService {
@@ -41,21 +42,23 @@ export class ContactService {
     return count;
   }
 
-  async findAll(sortBy: SortByTypes): Promise<Contact[]> {
+  async findAll(listDto: ListDto) {
+    const { skip, take, order } = listDto;
     const contacts = await this.mysqlRepository.find();
-    return sortBy
+    const sortedContacts = order
       ? contacts.sort((a, b) => {
-          switch (sortBy.toUpperCase()) {
-            case SortByTypes.FirstName:
+          switch (order.key.toUpperCase()) {
+            case SortKeys.FirstName:
               return a.firstName.localeCompare(b.firstName);
-            case SortByTypes.LastName:
+            case SortKeys.LastName:
               return a.lastName.localeCompare(b.lastName);
-            case SortByTypes.Id:
+            case SortKeys.Id:
               return a.id - b.id;
           }
         })
       : contacts.sort((a, b) => a.firstName.localeCompare(b.firstName));
-    // todo add pagination
+
+    return this.paginate(sortedContacts, skip, take);
   }
 
   async search(searchContactDto: SearchContactDto): Promise<Contact[]> {
@@ -117,5 +120,21 @@ export class ContactService {
 
   async findAllFavorites(): Promise<Contact[]> {
     return await this.mysqlRepository.find({ where: { isFavorite: true } });
+  }
+
+  private paginate(contacts: Contact[], skip: number, take: number) {
+    const totalContacts = contacts.length;
+    const totalPages = Math.ceil(totalContacts / take);
+
+    const paginatedContacts: Contact[][] = [];
+
+    for (let i = 0; i < totalPages; i++) {
+      const startIndex = i * take + skip;
+      const endIndex = Math.min(startIndex + take, totalContacts);
+      const pageContacts = contacts.slice(startIndex, endIndex);
+      paginatedContacts.push(pageContacts);
+    }
+
+    return { contacts: paginatedContacts, totalPages };
   }
 }

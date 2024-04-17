@@ -12,8 +12,8 @@ import { ContactService } from './contact.service';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
 import { SearchContactDto } from './dto/search-contact.dto';
-import { SortByTypes } from './enums/enums';
-import { SortByTypeValidator } from './validators/sortBy.validator';
+import { SortByTypeValidator } from '../commons/validators/sortBy.validator';
+import { ListDto } from '../commons/dto/list.dto';
 
 @Controller('contact')
 export class ContactController {
@@ -25,11 +25,8 @@ export class ContactController {
   }
 
   @Get()
-  async findAll(
-    @Query('sortBy', new SortByTypeValidator()) sortBy: SortByTypes,
-  ) {
-    const contacts = await this.contactService.findAll(sortBy);
-    return { contacts, count: contacts.length };
+  async findAll(@Body(new SortByTypeValidator()) listDto: ListDto) {
+    return await this.contactService.findAll(listDto);
   }
 
   @Get('size')
