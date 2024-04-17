@@ -28,7 +28,7 @@ export class ContactService {
         .getRawOne()) + 1;
     const contact = { id, ...createContactDto, isBlocked: false };
     await this.mysqlRepository.save(contact);
-    this.logger.debug(`new contact created in the DBs. 
+    this.logger.debug(`new contact created in the DB. 
       fullName: ${contact.firstName} ${contact.lastName}`);
     this.logger.info(`res: ${JSON.stringify(contact)}`);
     return contact;
@@ -85,22 +85,25 @@ export class ContactService {
     id: number,
     updateContactDto: UpdateContactDto,
   ): Promise<UpdateContactDto> {
+    this.logger.debug(`trying to update contact in DB. Contact id: ${id}`);
     await this.findOneOrFail(id);
     const updatedContact = await this.mysqlRepository.save(updateContactDto);
     await this.cacheManager.update(`${id}`, updatedContact);
     this.logger.debug(
-      `contact updated in the DBs. fullName: ${updatedContact.firstName} ${updatedContact.lastName}`,
+      `contact updated in the DB. fullName: ${updatedContact.firstName} ${updatedContact.lastName}`,
     );
     return updateContactDto;
   }
 
   async remove(id: number): Promise<Contact> {
     const contact = await this.findOneOrFail(id);
-    this.logger.debug(`trying to delete contact ${JSON.stringify(contact)}`);
+    this.logger.debug(
+      `trying to delete contact ${JSON.stringify(contact)} from DB.`,
+    );
     const count = await this.mysqlRepository.remove(contact);
     await this.cacheManager.remove(`${id}`);
     this.logger.debug(
-      `The number of contacts in the DBs after contact name: ${contact.firstName} ${contact.lastName} deleted is: ${count}`,
+      `The number of contacts in the DB after contact name: ${contact.firstName} ${contact.lastName} deleted is: ${count}`,
     );
     return contact;
   }

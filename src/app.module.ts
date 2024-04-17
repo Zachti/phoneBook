@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoggerModule } from './logger/logger.module';
@@ -9,6 +9,7 @@ import { HealthModule } from './health/health.module';
 import { TypeOrmExceptionFilter } from './exceptionsFilter/typeOrmError.filter';
 import { APP_FILTER } from '@nestjs/core';
 import { ConfigCoreModule } from './config/config.module';
+import { LoggerMiddleware } from './middleware/logger.middleware';
 
 @Module({
   imports: [
@@ -44,4 +45,8 @@ import { ConfigCoreModule } from './config/config.module';
     },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}
