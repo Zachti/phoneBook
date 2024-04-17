@@ -1,0 +1,36 @@
+version: "3"
+services:
+  mysql:
+    image: mysql:8
+    ports:
+      - '3306:3306'
+  mongodb:
+    image: mongo:3.6.21
+    ports:
+      - '27017:27017'
+  redis:
+    image: 'redis:alpine'
+    ports:
+      - '6379:6379'
+    command: redis-server --requirepass root
+  phoneBook:
+    ports:
+      - '3001:3001'
+    build:
+      context: './'
+      dockerfile: 'apps/wolverine/wolverine-api/Dockerfile'
+      target: 'builder' # build only the first stage of the dockerfile - named "build"
+    restart: 'unless-stopped'
+    volumes:
+      - .:/home/node
+      - /home/node/node_modules
+    command: sh -c "npm run seed:wolverine-api && npm run start:wolverine-api:dev"
+    networks:
+      - nexus_network
+    env_file:
+      - 'development/local-base.env'
+      - 'apps/wolverine/wolverine-api/development/local.env'
+    depends_on:
+      - mysql
+      - mongodb
+      - redis
