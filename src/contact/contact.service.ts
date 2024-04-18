@@ -44,11 +44,9 @@ export class ContactService {
     pagination: boolean,
   ): Promise<paginationResponse | listResponse> {
     const { skip, take, order } = listDto;
-    const contacts = await this.mysqlRepository.find();
+    const [contacts, count] = await this.mysqlRepository.findAndCount();
     const sortedContacts = this.orderBy(contacts, order);
-    return pagination
-      ? this.paginate(sortedContacts, skip, take)
-      : { contacts: sortedContacts, count: sortedContacts.length };
+    return this.paginate(sortedContacts, skip, take, count, pagination);
   }
 
   async search(
@@ -70,11 +68,9 @@ export class ContactService {
         lastName: `%${lastName}%`,
       });
     }
-    const contacts = await queryBuilder.getMany();
+    const [contacts, count] = await queryBuilder.getManyAndCount();
     const sortedContacts = this.orderBy(contacts, order);
-    return pagination
-      ? this.paginate(sortedContacts, skip, take)
-      : { contacts: sortedContacts, count: sortedContacts.length };
+    return this.paginate(sortedContacts, skip, take, count, pagination);
   }
 
   async update(
@@ -127,29 +123,29 @@ export class ContactService {
     pagination: boolean,
   ): Promise<paginationResponse | listResponse> {
     const { skip, take, order } = listDto;
-    const contacts = isFavorite
-      ? await this.mysqlRepository.find({ where: { isFavorite: true } })
-      : await this.mysqlRepository.find({ where: { isBlocked: true } });
+    const [contacts, count] = isFavorite
+      ? await this.mysqlRepository.findAndCountBy({ isFavorite: true })
+      : await this.mysqlRepository.findAndCountBy({ isBlocked: true });
     const sortedContacts = this.orderBy(contacts, order);
-    return pagination
-      ? this.paginate(sortedContacts, skip, take)
-      : { contacts: sortedContacts, count: sortedContacts.length };
+    return this.paginate(sortedContacts, skip, take, count, pagination);
   }
 
   private paginate(
     contacts: Contact[],
     skip: number,
     take: number,
-  ): paginationResponse {
-    const size = contacts.length;
-    const totalContacts = size - skip;
+    count: number,
+    pagination: boolean,
+  ): paginationResponse | listResponse {
+    if (!pagination) return { contacts, count };
+    const totalContacts = count - skip;
     const totalPages = Math.ceil(totalContacts / take);
 
     const paginatedContacts: Contact[][] = [];
 
     for (let i = 0; i < totalPages; i++) {
       const startIndex = i * take + skip;
-      const endIndex = Math.min(startIndex + take, size);
+      const endIndex = Math.min(startIndex + take, count);
       const pageContacts = contacts.slice(startIndex, endIndex);
       paginatedContacts.push(pageContacts);
     }
