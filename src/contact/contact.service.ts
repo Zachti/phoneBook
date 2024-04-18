@@ -2,13 +2,11 @@ import { NotFoundException, Injectable } from '@nestjs/common';
 import { CreateContactDto, UpdateContactDto, SearchContactDto } from './dto';
 import { Contact } from './entities/contact.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindManyOptions, Repository } from 'typeorm';
 import { LoggerService } from '../logger/logger.service';
-import { SortKeys, SortType } from '../commons/enums/enums';
 import { CacheService } from '../cache/cache.service';
 import { ListDto } from '../commons/dto/list.dto';
 import { listResponse, paginationResponse } from './interfaces';
-import { SortInput } from '../commons/dto/sort.dto';
 
 @Injectable()
 export class ContactService {
@@ -44,9 +42,12 @@ export class ContactService {
     pagination: boolean,
   ): Promise<paginationResponse | listResponse> {
     const { skip, take, order } = listDto;
-    const [contacts, count] = await this.mysqlRepository.findAndCount();
-    const sortedContacts = this.orderBy(contacts, order);
-    return this.paginate(sortedContacts, skip, take, count, pagination);
+    const [contacts, count] = await this.mysqlRepository.findAndCount({
+      order: {
+        [order.key]: order.type,
+      },
+    });
+    return this.paginate(contacts, skip, take, count, pagination);
   }
 
   async search(
@@ -62,15 +63,16 @@ export class ContactService {
         firstName: `%${firstName}%`,
       });
     }
-
     if (lastName) {
       queryBuilder = queryBuilder.andWhere('contacts.lastName LIKE :lastName', {
         lastName: `%${lastName}%`,
       });
     }
+    queryBuilder.orderBy({
+      [order.key]: order.type.toUpperCase() as 'ASC' | 'DESC',
+    });
     const [contacts, count] = await queryBuilder.getManyAndCount();
-    const sortedContacts = this.orderBy(contacts, order);
-    return this.paginate(sortedContacts, skip, take, count, pagination);
+    return this.paginate(contacts, skip, take, count, pagination);
   }
 
   async update(
@@ -123,11 +125,13 @@ export class ContactService {
     pagination: boolean,
   ): Promise<paginationResponse | listResponse> {
     const { skip, take, order } = listDto;
-    const [contacts, count] = isFavorite
-      ? await this.mysqlRepository.findAndCountBy({ isFavorite: true })
-      : await this.mysqlRepository.findAndCountBy({ isBlocked: true });
-    const sortedContacts = this.orderBy(contacts, order);
-    return this.paginate(sortedContacts, skip, take, count, pagination);
+    const findOptions: FindManyOptions<Contact> = {
+      order: { [order.key]: order.type },
+      where: isFavorite ? { isFavorite } : { isBlocked: true },
+    };
+    const [contacts, count] =
+      await this.mysqlRepository.findAndCount(findOptions);
+    return this.paginate(contacts, skip, take, count, pagination);
   }
 
   private paginate(
@@ -151,22 +155,5 @@ export class ContactService {
     }
 
     return { paginatedContacts, totalPages, totalContacts };
-  }
-
-  private orderBy(contacts: Contact[], sort: SortInput): Contact[] {
-    const { key, type } = sort;
-    const sortedContacts = contacts.sort((a, b) => {
-      switch (key) {
-        case SortKeys.FirstName:
-          return a.firstName.localeCompare(b.firstName);
-        case SortKeys.LastName:
-          return a.lastName.localeCompare(b.lastName);
-        case SortKeys.Id:
-          return a.id - b.id;
-      }
-    });
-
-    type === SortType.desc ? sortedContacts.reverse() : sortedContacts;
-    return sortedContacts;
   }
 }

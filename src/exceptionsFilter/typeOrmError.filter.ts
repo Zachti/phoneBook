@@ -21,6 +21,7 @@ export class TypeOrmExceptionFilter implements ExceptionFilter {
       ? exception.message.split(':')[1].trim()
       : exception.message;
     response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+      statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
       errorMessage,
       errorCode: (exception as any).code,
     });
