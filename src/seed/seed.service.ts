@@ -49,6 +49,8 @@ export class SeedService implements OnModuleDestroy, OnModuleInit {
     lastName VARCHAR(255),
     phoneNumber VARCHAR(255) NOT NULL,
     address VARCHAR(255),
+    email VARCHAR(255),
+    notes TEXT,
     isFavorite BOOLEAN DEFAULT false,
     isBlocked BOOLEAN NOT NULL DEFAULT false,
     imageUrl VARCHAR(255)
