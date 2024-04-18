@@ -41,7 +41,7 @@ export class SeedService implements OnModuleDestroy, OnModuleInit {
   }
 
   private async createTable() {
-    //await this.ds.query(`DROP TABLE contacts`);
+    await this.ds.query(`DROP TABLE contacts`);
     this.logger.debug('Creating table...');
     await this.ds.query(`CREATE TABLE contacts (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -56,9 +56,7 @@ export class SeedService implements OnModuleDestroy, OnModuleInit {
     this.logger.debug(`Table created.`);
   }
 
-  onModuleDestroy() {
-    this.logger.debug('Dropping DB...');
-    const res = this.ds.dropDatabase();
-    this.logger.debug(`DB dropped: ${JSON.stringify(res)}`);
+  public async onModuleDestroy() {
+    await this.ds.dropDatabase();
   }
 }

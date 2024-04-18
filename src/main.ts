@@ -4,9 +4,9 @@ import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(PhoneBookModule);
-  app.enableShutdownHooks();
   const configService = app.get(ConfigService);
   const port = parseInt(configService.get('APP_PORT'));
+  app.enableShutdownHooks();
   await app.listen(port);
 }
 bootstrap();
