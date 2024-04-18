@@ -1,35 +1,36 @@
-import { Controller, Get, Inject } from '@nestjs/common';
-import { RedisOptions, Transport } from '@nestjs/microservices';
+import { Controller, Get } from '@nestjs/common';
 import {
   HealthCheck,
   HealthCheckService,
   MicroserviceHealthIndicator,
   TypeOrmHealthIndicator,
 } from '@nestjs/terminus';
-import { redisConfig } from '../config';
-import { ConfigType } from '@nestjs/config';
+import { InjectDataSource } from '@nestjs/typeorm';
+import { Transport, RedisOptions } from '@nestjs/microservices';
+import { DataSource } from 'typeorm';
 
 @Controller('health')
 export class HealthController {
   constructor(
     private health: HealthCheckService,
     private db: TypeOrmHealthIndicator,
-    private microservice: MicroserviceHealthIndicator,
-    @Inject(redisConfig.KEY)
-    private readonly redisCfg: ConfigType<typeof redisConfig>,
+    @InjectDataSource('mysql') private readonly mysqlDS: DataSource,
+    private microservice: MicroserviceHealthIndicator
   ) {}
 
   @Get()
   @HealthCheck()
   check() {
     return this.health.check([
-      () => this.db.pingCheck('database'),
-      async (redisCfg = this.redisCfg) =>
+      () => this.db.pingCheck('mysql', {connection: this.mysqlDS}),
+      async () =>
         this.microservice.pingCheck<RedisOptions>('redis', {
           transport: Transport.REDIS,
           options: {
-            host: redisCfg.host,
-            port: redisCfg.port,
+            host: 'redis',
+            port: 6379,
+            username: 'xxxx',
+            password: 'xxxx',
           },
         }),
     ]);

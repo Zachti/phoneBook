@@ -6,6 +6,7 @@ import {
   Patch,
   Delete,
   Query,
+  Param,
 } from '@nestjs/common';
 import { ContactService } from './contact.service';
 import { CreateContactDto, UpdateContactDto, SearchContactDto } from './dto';
@@ -58,7 +59,7 @@ export class ContactController {
   }
 
   @Get(':id')
-  findOne(@Query('id') id: string): Promise<Contact> {
+  findOne(@Param('id') id: string): Promise<Contact> {
     return this.contactService.findOneOrFail(+id);
   }
 
