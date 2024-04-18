@@ -7,7 +7,6 @@ import {
   Delete,
   Query,
   Param,
-  DefaultValuePipe,
 } from '@nestjs/common';
 import { ContactService } from './contact.service';
 import { CreateContactDto, UpdateContactDto, SearchContactDto } from './dto';
@@ -15,6 +14,7 @@ import { ListDto } from '../commons/dto/list.dto';
 import { paginationResponse } from './interfaces';
 import { Contact } from './entities/contact.entity';
 import { SortByTransform } from '../commons/pipes/sortBy.transform';
+import { ListDtoPipe } from '../commons/pipes/listDto.transform';
 
 @Controller('contacts')
 export class ContactController {
@@ -27,10 +27,7 @@ export class ContactController {
 
   @Get()
   async findAll(
-    @Body(
-      new DefaultValuePipe({ skip: 0, take: 10, order: {} }),
-      new SortByTransform(),
-    )
+    @Body(new ListDtoPipe(), new SortByTransform())
     listDto: ListDto,
   ): Promise<paginationResponse> {
     return await this.contactService.findAll(listDto);
@@ -45,10 +42,7 @@ export class ContactController {
   @Get('search')
   async search(
     @Body() searchContactDto: SearchContactDto,
-    @Body(
-      new DefaultValuePipe({ skip: 0, take: 10, order: {} }),
-      new SortByTransform(),
-    )
+    @Body(new ListDtoPipe(), new SortByTransform())
     listDto: ListDto,
   ): Promise<paginationResponse> {
     return await this.contactService.search(searchContactDto, listDto);
@@ -74,10 +68,7 @@ export class ContactController {
 
   @Get('favorites')
   async findAllFavorites(
-    @Body(
-      new DefaultValuePipe({ skip: 0, take: 10, order: {} }),
-      new SortByTransform(),
-    )
+    @Body(new ListDtoPipe(), new SortByTransform())
     listDto: ListDto,
   ): Promise<paginationResponse> {
     return await this.contactService.findMarkedContacts(true, listDto);
@@ -85,10 +76,7 @@ export class ContactController {
 
   @Get('block')
   async findAllBlockedContacts(
-    @Body(
-      new DefaultValuePipe({ skip: 0, take: 10, order: {} }),
-      new SortByTransform(),
-    )
+    @Body(new ListDtoPipe(), new SortByTransform())
     listDto: ListDto,
   ): Promise<paginationResponse> {
     return await this.contactService.findMarkedContacts(false, listDto);

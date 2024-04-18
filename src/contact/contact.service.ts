@@ -54,13 +54,13 @@ export class ContactService {
     const { firstName, lastName } = searchContactDto;
     let queryBuilder = this.mysqlRepository.createQueryBuilder('contacts');
     if (firstName) {
-      queryBuilder = queryBuilder.where('contact.firstName LIKE :firstName', {
+      queryBuilder = queryBuilder.where('contacts.firstName LIKE :firstName', {
         firstName: `%${firstName}%`,
       });
     }
 
     if (lastName) {
-      queryBuilder = queryBuilder.andWhere('contact.lastName LIKE :lastName', {
+      queryBuilder = queryBuilder.andWhere('contacts.lastName LIKE :lastName', {
         lastName: `%${lastName}%`,
       });
     }
