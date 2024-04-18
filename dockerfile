@@ -1,24 +1,19 @@
 FROM node:18.16.1-alpine as builder
 
-WORKDIR /tmp/
+WORKDIR /home/node
 
-COPY package*.json ./
+COPY package*.json /home/node/
 
-RUN npm install
-
-COPY . .
-
-RUN npm run build
+COPY . /home/node/
 
 FROM node:18.16.1-alpine as phonebook
 
-WORKDIR /app/
+WORKDIR /home/app
 
-COPY --from=build /tmp/node_modules ./node_modules
-COPY --from=build /tmp/package*.json ./
-COPY --from=build /tmp/dist ./dist
-COPY --from=build /tmp/.env ./.env
+COPY --from=builder /home/node/dist/apps/wolverine/wolverine-api/package*.json /home/app/
+
+COPY --from=builder /home/node/dist/ /home/app/dist/
 
 RUN apk --no-cache add curl
 
-CMD ["node", "dist/main.js"]
+CMD ["sh", "-c",, "node dist/main.js"]
