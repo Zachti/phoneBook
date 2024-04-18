@@ -7,6 +7,7 @@ import {
   Delete,
   Query,
   Param,
+  UsePipes,
 } from '@nestjs/common';
 import { ContactService } from './contact.service';
 import { CreateContactDto, UpdateContactDto, SearchContactDto } from './dto';
@@ -14,6 +15,7 @@ import { SortByTypeValidator } from '../commons/validators/sortBy.validator';
 import { ListDto } from '../commons/dto/list.dto';
 import { paginationResponse } from './interfaces';
 import { Contact } from './entities/contact.entity';
+import { ListDtoPipe } from '../commons/pipes/listDto.transform';
 
 @Controller('contacts')
 export class ContactController {
@@ -25,6 +27,7 @@ export class ContactController {
   }
 
   @Get()
+  @UsePipes(new ListDtoPipe())
   async findAll(
     @Body(new SortByTypeValidator()) listDto: ListDto,
   ): Promise<paginationResponse> {
@@ -38,6 +41,7 @@ export class ContactController {
   }
 
   @Get('search')
+  @UsePipes(new ListDtoPipe())
   async search(
     @Body() searchContactDto: SearchContactDto,
     @Body(new SortByTypeValidator()) listDto: ListDto,
@@ -64,6 +68,7 @@ export class ContactController {
   }
 
   @Get('favorites')
+  @UsePipes(new ListDtoPipe())
   async findAllFavorites(
     @Body(new SortByTypeValidator()) listDto: ListDto,
   ): Promise<paginationResponse> {

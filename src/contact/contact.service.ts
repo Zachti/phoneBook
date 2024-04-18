@@ -40,7 +40,7 @@ export class ContactService {
   }
 
   async findAll(listDto: ListDto): Promise<paginationResponse> {
-    const { skip = 0, take = 10, order = {} } = listDto;
+    const { skip, take, order } = listDto;
     const contacts = await this.mysqlRepository.find();
     const sortedContacts = this.orderBy(contacts, order);
     return this.paginate(sortedContacts, skip, take);
@@ -50,7 +50,7 @@ export class ContactService {
     searchContactDto: SearchContactDto,
     listDto: ListDto,
   ): Promise<paginationResponse> {
-    const { skip = 0, take = 10, order = {} } = listDto;
+    const { skip, take, order } = listDto;
     const { firstName, lastName } = searchContactDto;
     let queryBuilder = this.mysqlRepository.createQueryBuilder('contacts');
     if (firstName) {
@@ -117,7 +117,7 @@ export class ContactService {
     isFavorite: boolean,
     listDto: ListDto,
   ): Promise<paginationResponse> {
-    const { skip = 0, take = 10, order = {} } = listDto;
+    const { skip, take, order } = listDto;
     const contacts = isFavorite
       ? await this.mysqlRepository.find({ where: { isFavorite: true } })
       : await this.mysqlRepository.find({ where: { isBlocked: true } });
@@ -147,18 +147,17 @@ export class ContactService {
   }
 
   private orderBy(contacts: Contact[], sort: SortInput): Contact[] {
-    const { key = SortKeys.Id, type = SortType.asc } = sort;
-    const sortedContacts =
-      contacts.sort((a, b) => {
-        switch (key) {
-          case SortKeys.FirstName:
-            return a.firstName.localeCompare(b.firstName);
-          case SortKeys.LastName:
-            return a.lastName.localeCompare(b.lastName);
-          case SortKeys.Id:
-            return a.id - b.id;
-        }
-      })
+    const { key, type } = sort;
+    const sortedContacts = contacts.sort((a, b) => {
+      switch (key) {
+        case SortKeys.FirstName:
+          return a.firstName.localeCompare(b.firstName);
+        case SortKeys.LastName:
+          return a.lastName.localeCompare(b.lastName);
+        case SortKeys.Id:
+          return a.id - b.id;
+      }
+    });
 
     type === SortType.desc ? sortedContacts.reverse() : sortedContacts;
     return sortedContacts;
