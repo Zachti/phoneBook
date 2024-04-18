@@ -1,34 +1,43 @@
+import { BooleanTransformer } from '../../typeorm/transformers/boolean.transformer';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('contacts')
 export class Contact {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  @Column()
+  @Column('varchar', { length: 255 })
   firstName: string;
 
-  @Column({ nullable: true })
+  @Column('varchar', { nullable: true, length: 255 })
   lastName?: string;
 
-  @Column()
+  @Column('varchar', { length: 255 })
   phoneNumber: string;
 
-  @Column({ nullable: true })
+  @Column('varchar', { nullable: true, length: 255 })
   address?: string;
 
-  @Column({ nullable: true })
+  @Column('boolean', {
+    nullable: true,
+    transformer: new BooleanTransformer(),
+    default: () => 'false',
+  })
   isFavorite?: boolean;
 
-  @Column()
-  isBlocked: boolean;
+  @Column('boolean', {
+    nullable: true,
+    transformer: new BooleanTransformer(),
+    default: () => 'false',
+  })
+  isBlocked?: boolean;
 
-  @Column({ nullable: true })
+  @Column('varchar', { nullable: true, length: 255 })
   imageUrl?: string;
 
-  @Column({ nullable: true })
+  @Column('varchar', { nullable: true, length: 255 })
   email?: string;
 
-  @Column({ nullable: true })
+  @Column('text', { nullable: true })
   notes?: string;
 }

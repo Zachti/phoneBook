@@ -1,9 +1,9 @@
 import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
-import { LoggerService } from '../logger/logger.service';
+import { LoggerService } from '../../logger/logger.service';
 import { contacts } from './mockContacts';
 import { DataSource } from 'typeorm';
 import { InjectDataSource } from '@nestjs/typeorm';
-import { Contact } from '../contact/entities/contact.entity';
+import { Contact } from '../../contact/entities/contact.entity';
 
 @Injectable()
 export class SeedService implements OnModuleDestroy, OnModuleInit {
@@ -52,7 +52,7 @@ export class SeedService implements OnModuleDestroy, OnModuleInit {
     email VARCHAR(255),
     notes TEXT,
     isFavorite BOOLEAN DEFAULT false,
-    isBlocked BOOLEAN NOT NULL DEFAULT false,
+    isBlocked BOOLEAN DEFAULT false,
     imageUrl VARCHAR(255)
     )`);
     this.logger.debug(`Table created.`);
