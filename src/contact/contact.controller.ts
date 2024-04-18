@@ -11,7 +11,7 @@ import {
 import { ContactService } from './contact.service';
 import { CreateContactDto, UpdateContactDto, SearchContactDto } from './dto';
 import { ListDto } from '../commons/dto/list.dto';
-import { paginationResponse } from './interfaces';
+import { listResponse, paginationResponse } from './interfaces';
 import { Contact } from './entities/contact.entity';
 import { SortByTransform } from '../commons/pipes/sortBy.transform';
 import { ListDtoPipe } from '../commons/pipes/listDto.transform';
@@ -29,8 +29,9 @@ export class ContactController {
   async findAll(
     @Body(new ListDtoPipe(), new SortByTransform())
     listDto: ListDto,
-  ): Promise<paginationResponse> {
-    return await this.contactService.findAll(listDto);
+    @Query('pagination') pagination: boolean,
+  ): Promise<paginationResponse | listResponse> {
+    return await this.contactService.findAll(listDto, pagination);
   }
 
   @Get('size')
@@ -44,8 +45,13 @@ export class ContactController {
     @Body() searchContactDto: SearchContactDto,
     @Body(new ListDtoPipe(), new SortByTransform())
     listDto: ListDto,
-  ): Promise<paginationResponse> {
-    return await this.contactService.search(searchContactDto, listDto);
+    @Query('pagination') pagination: boolean,
+  ): Promise<paginationResponse | listResponse> {
+    return await this.contactService.search(
+      searchContactDto,
+      listDto,
+      pagination,
+    );
   }
 
   @Patch('update')
@@ -70,15 +76,25 @@ export class ContactController {
   async findAllFavorites(
     @Body(new ListDtoPipe(), new SortByTransform())
     listDto: ListDto,
-  ): Promise<paginationResponse> {
-    return await this.contactService.findMarkedContacts(true, listDto);
+    @Query('pagination') pagination: boolean,
+  ): Promise<paginationResponse | listResponse> {
+    return await this.contactService.findMarkedContacts(
+      true,
+      listDto,
+      pagination,
+    );
   }
 
   @Get('block')
   async findAllBlockedContacts(
     @Body(new ListDtoPipe(), new SortByTransform())
     listDto: ListDto,
-  ): Promise<paginationResponse> {
-    return await this.contactService.findMarkedContacts(false, listDto);
+    @Query('pagination') pagination: boolean,
+  ): Promise<paginationResponse | listResponse> {
+    return await this.contactService.findMarkedContacts(
+      false,
+      listDto,
+      pagination,
+    );
   }
 }

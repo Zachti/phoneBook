@@ -7,7 +7,7 @@ import { LoggerService } from '../logger/logger.service';
 import { SortKeys, SortType } from '../commons/enums/enums';
 import { CacheService } from '../cache/cache.service';
 import { ListDto } from '../commons/dto/list.dto';
-import { paginationResponse } from './interfaces';
+import { listResponse, paginationResponse } from './interfaces';
 import { SortInput } from '../commons/dto/sort.dto';
 
 @Injectable()
@@ -39,17 +39,23 @@ export class ContactService {
     return count;
   }
 
-  async findAll(listDto: ListDto): Promise<paginationResponse> {
+  async findAll(
+    listDto: ListDto,
+    pagination: boolean,
+  ): Promise<paginationResponse | listResponse> {
     const { skip, take, order } = listDto;
     const contacts = await this.mysqlRepository.find();
     const sortedContacts = this.orderBy(contacts, order);
-    return this.paginate(sortedContacts, skip, take);
+    return pagination
+      ? this.paginate(sortedContacts, skip, take)
+      : { contacts: sortedContacts, count: sortedContacts.length };
   }
 
   async search(
     searchContactDto: SearchContactDto,
     listDto: ListDto,
-  ): Promise<paginationResponse> {
+    pagination: boolean,
+  ): Promise<paginationResponse | listResponse> {
     const { skip, take, order } = listDto;
     const { firstName, lastName } = searchContactDto;
     let queryBuilder = this.mysqlRepository.createQueryBuilder('contacts');
@@ -66,7 +72,9 @@ export class ContactService {
     }
     const contacts = await queryBuilder.getMany();
     const sortedContacts = this.orderBy(contacts, order);
-    return this.paginate(sortedContacts, skip, take);
+    return pagination
+      ? this.paginate(sortedContacts, skip, take)
+      : { contacts: sortedContacts, count: sortedContacts.length };
   }
 
   async update(
@@ -116,13 +124,16 @@ export class ContactService {
   async findMarkedContacts(
     isFavorite: boolean,
     listDto: ListDto,
-  ): Promise<paginationResponse> {
+    pagination: boolean,
+  ): Promise<paginationResponse | listResponse> {
     const { skip, take, order } = listDto;
     const contacts = isFavorite
       ? await this.mysqlRepository.find({ where: { isFavorite: true } })
       : await this.mysqlRepository.find({ where: { isBlocked: true } });
     const sortedContacts = this.orderBy(contacts, order);
-    return this.paginate(sortedContacts, skip, take);
+    return pagination
+      ? this.paginate(sortedContacts, skip, take)
+      : { contacts: sortedContacts, count: sortedContacts.length };
   }
 
   private paginate(
