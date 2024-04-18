@@ -36,7 +36,7 @@ export class LoggerService {
   }
 
   log(message: any, ...optionalParams: any[]): void {
-    this.logger.log(message, { ...optionalParams });
+    this.logger.debug(message, { ...optionalParams });
   }
 
   warn(message: string): void {

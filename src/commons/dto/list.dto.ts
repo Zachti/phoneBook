@@ -1,9 +1,9 @@
 import { SortInput } from './sort.dto';
 
 export class ListDto {
-  skip?: number = 0;
+  skip?: number;
 
-  take?: number = 10;
+  take?: number;
 
   order?: SortInput;
 }

@@ -1,7 +1,7 @@
 export enum SortKeys {
-  FirstName = 'FIRST_NAME',
-  LastName = 'LAST_NAME',
-  Id = 'ID',
+  FirstName = 'FirstName',
+  LastName = 'LastName',
+  Id = 'Id',
 }
 
 export enum SortType {

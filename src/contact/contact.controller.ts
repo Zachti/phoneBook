@@ -15,7 +15,7 @@ import { ListDto } from '../commons/dto/list.dto';
 import { paginationResponse } from './interfaces';
 import { Contact } from './entities/contact.entity';
 
-@Controller('contact')
+@Controller('contacts')
 export class ContactController {
   constructor(private readonly contactService: ContactService) {}
 

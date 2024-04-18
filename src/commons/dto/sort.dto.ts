@@ -1,7 +1,7 @@
 import { SortKeys, SortType } from '../enums/enums';
 
 export class SortInput {
-  key!: SortKeys;
+  key?: SortKeys;
 
   type?: SortType = SortType.asc;
 }
