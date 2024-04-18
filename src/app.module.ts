@@ -10,6 +10,7 @@ import { TypeOrmExceptionFilter } from './exceptionsFilter/typeOrmError.filter';
 import { APP_FILTER } from '@nestjs/core';
 import { ConfigCoreModule } from './config/config.module';
 import { LoggerMiddleware } from './middleware/logger.middleware';
+import { SeedModule } from './seed/seed.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { LoggerMiddleware } from './middleware/logger.middleware';
     LoggerModule,
     ContactModule,
     HealthModule,
+    SeedModule,
   ],
   providers: [
     {
