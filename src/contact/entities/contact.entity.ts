@@ -25,4 +25,10 @@ export class Contact {
 
   @Column({ nullable: true })
   imageUrl?: string;
+
+  @Column({ nullable: true })
+  email?: string;
+
+  @Column({ nullable: true })
+  notes?: string;
 }
