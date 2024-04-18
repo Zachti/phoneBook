@@ -67,11 +67,6 @@ export class ContactController {
     return this.contactService.remove(+id);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string): Promise<Contact> {
-    return this.contactService.findOneOrFail(+id);
-  }
-
   @Get('favorites')
   async findAllFavorites(
     @Body(new ListDtoPipe(), new SortByTransform())
@@ -96,5 +91,10 @@ export class ContactController {
       listDto,
       pagination,
     );
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string): Promise<Contact> {
+    return this.contactService.findOneOrFail(+id);
   }
 }
