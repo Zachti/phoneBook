@@ -71,7 +71,7 @@ Remove a contact from the phone book.
 ### Find All Contacts: 
 Retrieve all contacts.
 
-request example - 
+* Request example - 
 ```
 GET /contacts?pagination=true HTTP/1.1
 
