@@ -240,6 +240,10 @@ ensuring that any changes made to the code are automatically detected and the se
 $ npm run test
 ```
 
+## Postman Collection
+
+You can download the Postman collection for this API [here](https://api.postman.com/collections/31801051-7625d6e3-3544-4377-af53-2532ec8d9925?access_key=PMAT-01HVVG7MHND273PD1RDMGAS693).
+
 ## Accessing the Application
 
 Once the application is running, it will be accessible at the following URL:

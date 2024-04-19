@@ -9,7 +9,7 @@ export class Contact {
   @Column('varchar', { length: 255 })
   firstName: string;
 
-  @Column('varchar', { length: 255, default: () => ''})
+  @Column('varchar', { length: 255, default: () => '' })
   lastName: string;
 
   @Column('varchar', { length: 255 })
