@@ -25,8 +25,14 @@
 
 # Description
 
-This application serves as a phone book (contacts) similar to the contacts book on your personal phone.
-It is built using the Nest framework, a progressive Node.js framework for building efficient and scalable server-side applications.
+This application serves as a comprehensive digital phone book, providing users with a centralized platform to manage their contacts. 
+Seamlessly integrated with the Nest framework, a robust Node.js framework renowned for its scalability and efficiency, this application offers an array of features to enhance contact management.
+
+Users can effortlessly add, edit, search, and delete contacts, ensuring that their contact information is always up-to-date. 
+Additionally, the application supports advanced functionalities such as marking contacts as favorites or blocking specific contacts.
+
+Utilizing a combination of Redis cache and MySQL database, the application ensures fast and reliable access to contact information. 
+The Redis cache optimizes performance by storing frequently accessed data, while the MySQL database securely stores and manages the complete set of contact details.
 
 ## Data Storage
 
