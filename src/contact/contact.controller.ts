@@ -6,7 +6,6 @@ import {
   Patch,
   Delete,
   Query,
-  Param,
 } from '@nestjs/common';
 import { ContactService } from './contact.service';
 import { CreateContactDto, UpdateContactDto, SearchContactDto } from './dto';
