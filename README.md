@@ -241,7 +241,7 @@ Please note that Docker Compose will start the application in watch mode,
 ensuring that any changes made to the code are automatically detected and the server is restarted accordingly.
 
 ## Seed Service
-The application includes a seed service that automatically creates the necessary database tables and inserts 22 mock contact records upon initialization.
+The application includes a seed service that automatically creates the necessary database table and inserts 22 mock contact records upon initialization.
 This eliminates the need to manually create contacts in order to test all the features of the server.
 Additionally, as part of the hot reload feature, the seed service will drop all database content upon module destruction. 
 Upon restart and initialization, the seed service will recreate the table with the 22 mock contacts.
