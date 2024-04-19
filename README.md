@@ -113,7 +113,7 @@ Update an existing contact's details.
 Patch /contacts/update?id=1 HTTP/1.1
 {
 "email": "zachti@mta.ac.il",
-"note": "Hi Zak! Don't forge to eat your Mafrum!"
+"notes": "Hi Zak! Don't forge to eat your Mafrum!"
 }
 ```
 This request updates the contact with the ID of 1.
