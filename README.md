@@ -217,6 +217,13 @@ To install the necessary dependencies for the server application, follow these s
 $ npm install
 ```
 
+## Test
+
+```bash
+# unit tests
+$ npm run test
+```
+
 ## Running the app
 
 Once you have installed the dependencies, you can run the server application inside a Docker container. Follow these steps:
@@ -233,12 +240,12 @@ $ docker compose up
 Please note that Docker Compose will start the application in watch mode, 
 ensuring that any changes made to the code are automatically detected and the server is restarted accordingly.
 
-## Test
-
-```bash
-# unit tests
-$ npm run test
-```
+## Seed Service
+The application includes a seed service that automatically creates the necessary database tables and inserts 22 mock contact records upon initialization.
+This eliminates the need to manually create contacts in order to test all the features of the server.
+Additionally, as part of the hot reload feature, the seed service will drop all database content upon module destruction. 
+Upon restart and initialization, the seed service will recreate the table with the 22 mock contacts.
+Therefore, any manual changes made to the database will be erased after a restart.
 
 ## Postman Collection
 
@@ -248,7 +255,6 @@ $ npm run test
 4. Paste the copied link into the input field.
 5. The Postman collection will be imported into your workspace.
 6. Enjoy testing your API endpoints!
-
 
 ## Accessing the Application
 
