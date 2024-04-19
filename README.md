@@ -5,7 +5,7 @@
 [circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
 [circleci-url]: https://circleci.com/gh/nestjs/nest
 
-### Description
+# Description
 
 This application serves as a phone book (contacts) similar to the contacts book on your personal phone.
 It is built using the Nest framework, a progressive Node.js framework for building efficient and scalable server-side applications.
@@ -22,7 +22,7 @@ Additionally, the application provides a /health endpoint to ensure that the dat
 
 The service API includes the following endpoints:
 
-# Get Contacts:
+### Get Contacts:
 
 Retrieves contacts with optional pagination, ordering, and filtering.
 
@@ -31,31 +31,31 @@ Retrieves contacts with optional pagination, ordering, and filtering.
 * Filtering: The client can filter contacts based on specified criteria.
 * Pagination Usage: Pagination is optional. If pagination parameters are not provided, the endpoint will return all contacts without pagination.
 
-# Search Contact: 
+### Search Contact: 
 Search for contacts based on specified criteria.
 
-# Add Contact:
+### Add Contact:
 Add a new contact to the phone book.
 
-# Edit Contact: 
+### Edit Contact: 
 Update an existing contact's details.
 
-# Delete Contact: 
+### Delete Contact: 
 Remove a contact from the phone book.
 
-# Find All Contacts: 
+### Find All Contacts: 
 Retrieve all contacts.
 
-# Count All Contacts: 
+### Count All Contacts: 
 Count the total number of contacts.
 
-# Find All Favorite Contacts: 
+### Find All Favorite Contacts: 
 Retrieve all contacts marked as favorites.
 
-# Find All Blocked Contacts: 
+### Find All Blocked Contacts: 
 Retrieve all contacts that are blocked.
 
-# Find Contact by ID:
+### Find Contact by ID:
 Retrieve a contact by its unique identifier.
 
 ## Prerequisites
