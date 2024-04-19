@@ -9,8 +9,8 @@ export class Contact {
   @Column('varchar', { length: 255 })
   firstName: string;
 
-  @Column('varchar', { nullable: true, length: 255 })
-  lastName?: string;
+  @Column('varchar', { length: 255, default: () => ''})
+  lastName: string;
 
   @Column('varchar', { length: 255 })
   phoneNumber: string;
@@ -19,18 +19,16 @@ export class Contact {
   address?: string;
 
   @Column('boolean', {
-    nullable: true,
     transformer: new BooleanTransformer(),
     default: () => 'false',
   })
-  isFavorite?: boolean;
+  isFavorite: boolean;
 
   @Column('boolean', {
-    nullable: true,
     transformer: new BooleanTransformer(),
     default: () => 'false',
   })
-  isBlocked?: boolean;
+  isBlocked: boolean;
 
   @Column('varchar', { nullable: true, length: 255 })
   imageUrl?: string;

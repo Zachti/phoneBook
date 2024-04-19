@@ -46,7 +46,7 @@ export class SeedService implements OnModuleDestroy, OnModuleInit {
     await this.ds.query(`CREATE TABLE IF NOT EXISTS contacts (
     id INT AUTO_INCREMENT PRIMARY KEY,
     firstName VARCHAR(255) NOT NULL,
-    lastName VARCHAR(255),
+    lastName VARCHAR(255) DEFAULT '',
     phoneNumber VARCHAR(255) NOT NULL,
     address VARCHAR(255),
     email VARCHAR(255),
