@@ -230,6 +230,9 @@ Once you have installed the dependencies, you can run the server application ins
 $ docker compose up
 ```
 
+Please note that Docker Compose will start the application in watch mode, 
+ensuring that any changes made to the code are automatically detected and the server is restarted accordingly.
+
 ## Test
 
 ```bash
