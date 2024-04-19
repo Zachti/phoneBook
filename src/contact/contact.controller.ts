@@ -14,6 +14,7 @@ import { listResponse, paginationResponse } from './interfaces';
 import { Contact } from './entities/contact.entity';
 import { SortByTransform } from '../commons/pipes/sortBy.transform';
 import { ListDtoPipe } from '../commons/pipes/listDto.transform';
+import { SearchDtoPipe } from './pipes/searchDto.transform';
 
 @Controller('contacts')
 export class ContactController {
@@ -41,7 +42,7 @@ export class ContactController {
 
   @Get('search')
   async search(
-    @Body() searchContactDto: SearchContactDto,
+    @Body(new SearchDtoPipe()) searchContactDto: SearchContactDto,
     @Query('pagination') pagination: boolean,
   ): Promise<paginationResponse | listResponse> {
     return await this.contactService.search(searchContactDto, pagination);

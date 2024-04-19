@@ -46,9 +46,9 @@ export class ContactService {
     searchContactDto: SearchContactDto,
     pagination: boolean,
   ): Promise<paginationResponse | listResponse> {
-    const { firstName, lastName, listDto = {} } = searchContactDto;
+    const { firstName, lastName, listDto } = searchContactDto;
 
-    const { skip = 0, take = 10, order = {} } = listDto;
+    const { skip, take, order } = listDto;
 
     const where = {
       ...(firstName && { firstName: Like(`%${firstName}%`) }),
@@ -94,6 +94,8 @@ export class ContactService {
     pagination: boolean,
   ): paginationResponse | listResponse {
     if (!pagination) return { contacts, count };
+    if (skip > count)
+      return { paginatedContacts: [], totalPages: 0, totalContacts: 0 };
     const totalContacts = count - skip;
     const totalPages = Math.ceil(totalContacts / take);
 
