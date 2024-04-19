@@ -116,10 +116,14 @@ export class ContactService {
     }
     return skip > count
       ? { paginatedContacts: [], totalPages: 0, totalContacts: 0 }
-      : this.paginate(contacts, this.generatePaginationInfo(input));
+      : this.paginate(contacts, this.generatePaginationInput(input));
   }
 
-  private generatePaginationInfo({ skip, take, count }: GenerateResponseInput) {
+  private generatePaginationInput({
+    skip,
+    take,
+    count,
+  }: GenerateResponseInput): PaginationInput {
     const totalContacts = count - skip;
     const totalPages = Math.ceil(totalContacts / take);
     return { totalContacts, totalPages, skip, take, count };
@@ -128,7 +132,7 @@ export class ContactService {
   private paginate(
     contacts: Contact[],
     { totalContacts, totalPages, skip, take, count }: PaginationInput,
-  ): PaginationResponse | listResponse {
+  ): PaginationResponse {
     const paginatedContacts: Contact[][] = [];
 
     for (let i = 0; i < totalPages; i++) {
