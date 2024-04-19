@@ -26,7 +26,21 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+## Prerequisites
+
+Before running the server application, ensure that you have the following prerequisites installed on your system:
+
+1. Node.js version 18.16.1
+2. npm (Node Package Manager)
+3. Docker
+
 ## Installation
+
+To install the necessary dependencies for the server application, follow these steps:
+
+1. Open a terminal or command prompt.
+2. Navigate to the root directory of the server application.
+3. Run the following command to install dependencies using npm:
 
 ```bash
 $ npm install
@@ -34,15 +48,15 @@ $ npm install
 
 ## Running the app
 
+Once you have installed the dependencies, you can run the server application inside a Docker container. Follow these steps:
+
+1. Make sure Docker is running on your system.
+2. Open a terminal or command prompt.
+3. Navigate to the root directory of the server application.
+4. Run the following command to start the application using Docker Compose:
+
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+$ docker compose up
 ```
 
 ## Test
@@ -50,24 +64,29 @@ $ npm run start:prod
 ```bash
 # unit tests
 $ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
 ```
 
+## Accessing the Application
+
+Once the application is running, it will be accessible at the following URL:
+
+```
+http://localhost:3000
+```
+
+The server application listens on port 3000 by default.
+
+## Stopping the Application
+
+To stop the server application, you can use the following command:
+
+```bash 
+$ docker compose down
+```
+
+This will stop and remove the Docker containers associated with the server application.
+
+
+
 ## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+If you encounter any issues or have any questions, please contact zachti@mta.ac.il for assistance.
