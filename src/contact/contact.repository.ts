@@ -20,7 +20,10 @@ export class ContactRepository extends Repository<Contact> {
   async findOneOrThrow(id: number): Promise<Contact> {
     const key = `${id}`;
     const value = await this.cacheManager.get(key);
-    if (value) return value;
+    if (value) {
+      this.logger.debug(`Contact with id [${id}] found in cache.`);
+      return value;
+    }
     const contact = await super.findOneBy({ id });
     if (!contact) {
       this.logger.error(
