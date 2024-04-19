@@ -21,10 +21,7 @@ export class ContactService {
     this.logger.debug(
       `trying to create new contact: ${JSON.stringify(createContactDto)}`,
     );
-    const contact = await this.mysqlRepository.save({
-      ...createContactDto,
-      isBlocked: false,
-    });
+    const contact = await this.mysqlRepository.save(createContactDto);
     this.logger.debug(`new contact created in the DB. 
       fullName: ${contact.firstName} ${contact.lastName}`);
     this.logger.info(`res: ${JSON.stringify(contact)}`);
