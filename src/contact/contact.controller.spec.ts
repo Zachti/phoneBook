@@ -3,7 +3,7 @@ import { ContactController } from './contact.controller';
 import { ContactService } from './contact.service';
 import { CreateContactDto, SearchContactDto } from './dto';
 import { ListDto } from '../commons/dto/list.dto';
-import { listResponse, paginationResponse } from './interfaces';
+import { listResponse, PaginationResponse } from './interfaces';
 import { ContactRepository } from './contact.repository';
 import { LoggerService } from '../logger/logger.service';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
@@ -155,7 +155,7 @@ describe('ContactController', () => {
 
     const pagination = true;
 
-    const mockResponse: paginationResponse = {
+    const mockResponse: PaginationResponse = {
       paginatedContacts: [],
       totalPages: 2,
       totalContacts: 2,
@@ -209,7 +209,7 @@ describe('ContactController', () => {
 
     const mockPagination = true; // Mock pagination value here
 
-    const mockResponse: paginationResponse = {
+    const mockResponse: PaginationResponse = {
       paginatedContacts: [
         [
           {
@@ -314,7 +314,7 @@ describe('ContactController', () => {
     };
     const mockPagination = true;
 
-    const mockResponse: paginationResponse = {
+    const mockResponse: PaginationResponse = {
       paginatedContacts: [
         [
           {

@@ -10,7 +10,7 @@ import {
 import { ContactService } from './contact.service';
 import { CreateContactDto, UpdateContactDto, SearchContactDto } from './dto';
 import { ListDto } from '../commons/dto/list.dto';
-import { listResponse, paginationResponse } from './interfaces';
+import { listResponse, PaginationResponse } from './interfaces';
 import { Contact } from './entities/contact.entity';
 import { SortByTransform } from '../commons/pipes/sortBy.transform';
 import { ListDtoPipe } from '../commons/pipes/listDto.transform';
@@ -30,7 +30,7 @@ export class ContactController {
     @Body(new ListDtoPipe(), new SortByTransform())
     listDto: ListDto,
     @Query('pagination') pagination: boolean,
-  ): Promise<paginationResponse | listResponse> {
+  ): Promise<PaginationResponse | listResponse> {
     return await this.contactService.findAll(listDto, pagination);
   }
 
@@ -44,7 +44,7 @@ export class ContactController {
   async search(
     @Body(new SearchDtoPipe()) searchContactDto: SearchContactDto,
     @Query('pagination') pagination: boolean,
-  ): Promise<paginationResponse | listResponse> {
+  ): Promise<PaginationResponse | listResponse> {
     return await this.contactService.search(searchContactDto, pagination);
   }
 
@@ -66,7 +66,7 @@ export class ContactController {
     @Body(new ListDtoPipe(), new SortByTransform())
     listDto: ListDto,
     @Query('pagination') pagination: boolean,
-  ): Promise<paginationResponse | listResponse> {
+  ): Promise<PaginationResponse | listResponse> {
     return await this.contactService.findMarkedContacts(
       true,
       listDto,
@@ -79,7 +79,7 @@ export class ContactController {
     @Body(new ListDtoPipe(), new SortByTransform())
     listDto: ListDto,
     @Query('pagination') pagination: boolean,
-  ): Promise<paginationResponse | listResponse> {
+  ): Promise<PaginationResponse | listResponse> {
     return await this.contactService.findMarkedContacts(
       false,
       listDto,

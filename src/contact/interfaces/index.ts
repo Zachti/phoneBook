@@ -1,2 +1,3 @@
 export * from './listResponse.interface';
-export * from './paginationResponse.interface';
+export * from './pagination.interfaces';
+export * from './generateResponse.input';
