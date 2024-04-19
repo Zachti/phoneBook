@@ -5,26 +5,58 @@
 [circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
 [circleci-url]: https://circleci.com/gh/nestjs/nest
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+### Description
 
-## Description
+This application serves as a phone book (contacts) similar to the contacts book on your personal phone.
+It is built using the Nest framework, a progressive Node.js framework for building efficient and scalable server-side applications.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Data Storage
+
+The application uses Redis cache and MySQL database to store all contact data.
+
+## Health Endpoint
+
+Additionally, the application provides a /health endpoint to ensure that the database is up and running.
+
+## Service API
+
+The service API includes the following endpoints:
+
+# Get Contacts:
+
+Retrieves contacts with optional pagination, ordering, and filtering.
+
+* Pagination: By default, retrieves contacts with a maximum of 10 per page. However, the client can specify the number of contacts per page and skip certain contacts if needed.
+* Ordering: Contacts can be ordered by ID, first name, or last name in ascending or descending order.
+* Filtering: The client can filter contacts based on specified criteria.
+* Pagination Usage: Pagination is optional. If pagination parameters are not provided, the endpoint will return all contacts without pagination.
+
+# Search Contact: 
+Search for contacts based on specified criteria.
+
+# Add Contact:
+Add a new contact to the phone book.
+
+# Edit Contact: 
+Update an existing contact's details.
+
+# Delete Contact: 
+Remove a contact from the phone book.
+
+# Find All Contacts: 
+Retrieve all contacts.
+
+# Count All Contacts: 
+Count the total number of contacts.
+
+# Find All Favorite Contacts: 
+Retrieve all contacts marked as favorites.
+
+# Find All Blocked Contacts: 
+Retrieve all contacts that are blocked.
+
+# Find Contact by ID:
+Retrieve a contact by its unique identifier.
 
 ## Prerequisites
 
