@@ -5,6 +5,24 @@
 [circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
 [circleci-url]: https://circleci.com/gh/nestjs/nest
 
+ <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
+    <p align="center">
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
+<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
+<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
+<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
+<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
+<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
+  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
+    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
+  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
+</p>
+  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
+  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+
+
 # Description
 
 This application serves as a phone book (contacts) similar to the contacts book on your personal phone.
@@ -22,14 +40,21 @@ Additionally, the application provides a /health endpoint to ensure that the dat
 
 The service API includes the following endpoints:
 
-### Get Contacts:
+### Important note:
 
-Retrieves contacts with optional pagination, ordering, and filtering.
+All the endpoints that retrieve contacts have optional pagination, ordering, and skipping.
 
 * Pagination: By default, retrieves contacts with a maximum of 10 per page. However, the client can specify the number of contacts per page and skip certain contacts if needed.
 * Ordering: Contacts can be ordered by ID, first name, or last name in ascending or descending order.
-* Filtering: The client can filter contacts based on specified criteria.
+* Skipping: The client can skip a specified number of contacts based on the order of contacts.
 * Pagination Usage: Pagination is optional. If pagination parameters are not provided, the endpoint will return all contacts without pagination.
+
+These options are available for the following methods:
+
+1. Find All Contacts: Retrieve all contacts.
+2. Search Contact: Search for contacts based on letters from first or last name.
+3. Find All Favorite Contacts: Retrieve all contacts marked as favorites.
+4. Find All Blocked Contacts: Retrieve all contacts that are blocked.
 
 ### Search Contact: 
 Search for contacts based on specified criteria.
