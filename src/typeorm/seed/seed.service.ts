@@ -58,6 +58,8 @@ export class SeedService implements OnModuleDestroy, OnModuleInit {
   }
 
   public async onModuleDestroy() {
+    this.logger.debug('Dropping DB...');
     await this.ds.dropDatabase();
+    this.logger.debug(`DB dropped.`);
   }
 }
