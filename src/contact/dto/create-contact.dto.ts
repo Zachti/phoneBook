@@ -11,13 +11,11 @@ import { ValidName } from '../validators/name.validator';
 
 export class CreateContactDto {
   @IsNotEmpty()
-  @IsString()
   @ValidName()
   firstName: string;
 
-  @IsOptional()
-  @IsString()
   @ValidName()
+  @IsOptional()
   lastName?: string;
 
   @IsNotEmpty()
@@ -32,6 +30,10 @@ export class CreateContactDto {
   @IsOptional()
   @IsBoolean()
   isFavorite?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  isBlocked?: boolean;
 
   @IsOptional()
   @IsUrl()

@@ -25,7 +25,7 @@ export class ContactController {
     return this.contactService.create(createContactDto);
   }
 
-  @Get()
+  @Get('all')
   async findAll(
     @Body(new ListDtoPipe(), new SortByTransform())
     listDto: ListDto,
@@ -93,8 +93,8 @@ export class ContactController {
     );
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string): Promise<Contact> {
+  @Get()
+  findOne(@Query('id') id: string): Promise<Contact> {
     return this.contactService.findOneOrFail(+id);
   }
 }

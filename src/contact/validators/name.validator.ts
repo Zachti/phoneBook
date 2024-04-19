@@ -6,7 +6,7 @@ import {
   ValidatorConstraintInterface,
 } from 'class-validator';
 
-@ValidatorConstraint({ name: 'ValidName', async: false })
+@ValidatorConstraint({ name: 'validName', async: false })
 export class ValidateNameConstraint implements ValidatorConstraintInterface {
   validate(value: string): boolean {
     if (!value) return true;
