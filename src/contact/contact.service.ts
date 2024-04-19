@@ -46,9 +46,9 @@ export class ContactService {
     searchContactDto: SearchContactDto,
     pagination: boolean,
   ): Promise<paginationResponse | listResponse> {
-    const { firstName, lastName, listDto } = searchContactDto;
+    const { firstName, lastName, listDto = {} } = searchContactDto;
 
-    const { skip, take, order } = listDto;
+    const { skip = 0, take = 10, order = {} } = listDto;
 
     const where = {
       ...(firstName && { firstName: Like(`%${firstName}%`) }),
