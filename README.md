@@ -59,8 +59,46 @@ These options are available for the following methods:
 ### Search Contact: 
 Search for contacts based on specified criteria.
 
+* Request example - 
+```
+GET /contacts/search HTTP/1.1
+{
+  "firstName": "J"
+}
+```
+
+This request searches for contacts where the first name contains the letter "J" in a case-sensitive manner. 
+Since pagination is not specified, the response will include a list of all contacts matching this filter.
+By default, the skip parameter is set to 0, so all matching contacts will be returned. 
+The contacts will be ordered by ID in ascending order. The response will also include the count of the returned contacts.
+
+
 ### Add Contact:
 Add a new contact to the phone book.
+
+* Request example - 
+```
+POST /contacts HTTP/1.1
+{
+ "firstName": "Zak",
+ "phoneNumber": "0509998888"
+}
+```
+
+This request adds a new contact to the phone book with the first name "Zak" and the phone number "0509998888".
+
+The fields lastName, isFavorite, and isBlocked have default values. 
+Therefore, the lastName will be an empty string, isFavorite will be false, and isBlocked will be false.
+The rest of the fields, if not obtained from the client, will be set to null.
+
+The firstName and phoneNumber fields are required. Without them, the request will fail.
+
+It's important to note that the phoneNumber field must be a string and not a number.
+Additionally, it must start with "0" or "+". If it starts with "0", the length must be 10 characters, otherwise, it must be 13 characters.
+
+If the phone number already exists in the phone book, the request will fail.
+
+Furthermore, both the first name and last name strings can contain only letters and spaces.
 
 ### Edit Contact: 
 Update an existing contact's details.
@@ -73,7 +111,7 @@ Retrieve all contacts.
 
 * Request example - 
 ```
-GET /contacts?pagination=true HTTP/1.1
+GET /contacts/all?pagination=true HTTP/1.1
 
 {
   "order": {
