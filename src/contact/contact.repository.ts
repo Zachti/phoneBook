@@ -48,13 +48,11 @@ export class ContactRepository extends Repository<Contact> {
   }
 
   async updateWithCache(id: number, updateContactDto: UpdateContactDto) {
-    this.logger.debug(`trying to update contact in DB. Contact id: ${id}`);
+    this.logger.debug(`trying to update contact in DB. Contact id: [${id}]`);
     await this.findOneOrThrow(id);
-    const contact = await super.save(updateContactDto);
-    await this.cacheManager.update(`${id}`, contact);
-    this.logger.debug(
-      `contact updated in the DB. fullName: ${contact.firstName} ${contact.lastName}`,
-    );
+    await super.update(id, updateContactDto);
+    await this.cacheManager.remove(`${id}`);
+    this.logger.debug(`contact updated in the DB. contact id: [${id}]`);
     return updateContactDto;
   }
 }

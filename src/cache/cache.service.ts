@@ -25,15 +25,4 @@ export class CacheService<T> {
       logger.debug('value removed', { key });
     });
   }
-
-  async update(
-    key: string,
-    value: T,
-    logger = this.loggerService,
-  ): Promise<void> {
-    await this.cacheManager.del(key);
-    return this.cacheManager.set(key, value).then(() => {
-      logger.debug('value updated', { key, value });
-    });
-  }
 }
