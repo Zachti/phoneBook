@@ -1,12 +1,14 @@
-import { IsString } from 'class-validator';
+import { IsOptional } from 'class-validator';
 import { ValidName } from '../validators/name.validator';
+import { ListDto } from '../../commons/dto/list.dto';
 
 export class SearchContactDto {
-  @IsString()
   @ValidName()
   firstName: string;
 
-  @IsString()
   @ValidName()
   lastName: string;
+
+  @IsOptional()
+  listDto: ListDto;
 }

@@ -42,15 +42,9 @@ export class ContactController {
   @Get('search')
   async search(
     @Body() searchContactDto: SearchContactDto,
-    @Body(new ListDtoPipe(), new SortByTransform())
-    listDto: ListDto,
     @Query('pagination') pagination: boolean,
   ): Promise<paginationResponse | listResponse> {
-    return await this.contactService.search(
-      searchContactDto,
-      listDto,
-      pagination,
-    );
+    return await this.contactService.search(searchContactDto, pagination);
   }
 
   @Patch('update')
@@ -94,6 +88,6 @@ export class ContactController {
 
   @Get()
   findOne(@Query('id') id: string): Promise<Contact> {
-    return this.contactService.findOneOrFail(+id);
+    return this.contactService.findOneById(+id);
   }
 }
