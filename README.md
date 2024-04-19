@@ -72,7 +72,6 @@ Since pagination is not specified, the response will include a list of all conta
 By default, the skip parameter is set to 0, so all matching contacts will be returned. 
 The contacts will be ordered by ID in ascending order. The response will also include the count of the returned contacts.
 
-
 ### Add Contact:
 Add a new contact to the phone book.
 
@@ -103,8 +102,29 @@ Furthermore, both the first name and last name strings can contain only letters 
 ### Edit Contact: 
 Update an existing contact's details.
 
+* Request example - 
+```
+Patch /contacts/update?id=1 HTTP/1.1
+{
+"email": "zachti@mta.ac.il",
+"note": "Hi Zak! Don't forge to eat your Mafrum!"
+}
+```
+This request updates the contact with the ID of 1.
+If no contact with this ID exists, an error will be thrown.
+The request updates the email address to "zachti@mta.ac.il" and adds a note to the contact.
+After the update, if the contact data is in the cache, it will be erased.
+
 ### Delete Contact: 
 Remove a contact from the phone book.
+
+* Request example - 
+```
+DELETE /contacts/delete?id=1 HTTP/1.1
+```
+This request deletes the contact with the ID of 1 from the phone book.
+If no contact with this ID exists, an error will be thrown.
+After the deletion, if the contact data is in the cache, it will be erased.
 
 ### Find All Contacts: 
 Retrieve all contacts.
@@ -120,19 +140,56 @@ GET /contacts/all?pagination=true HTTP/1.1
 }
 ```
 by default the order type will be ascending, will not skip any contacts and will return 10 contacts per page.
-
+Additionally, the response will contain the total count of contacts returned and the total number of pages they have been divided into.
 
 ### Count All Contacts: 
-Count the total number of contacts.
+Count and retrieve the total number of contacts.
+
+* Request example - 
+``` 
+GET /contacts/size HTTP/1.1
+```
 
 ### Find All Favorite Contacts: 
 Retrieve all contacts marked as favorites.
 
+* Request example - 
+```
+GET /contacts/favorites HTTP/1.1
+{
+"skip" : 10,
+order: {
+  "key": "Id",
+  "type": "desc"
+}
+```
+This request retrieves all contacts that are marked as favorites in the phone book. 
+Pagination is disabled, so the response will include a list of all favorite contacts, skipping the first 10 contacts. 
+The contacts are ordered by ID in descending order, meaning the response will exclude the last 10 contacts (with the highest IDs), and the list will start from the latest IDs.
+Additionally, the response will contain the total count of contacts returned.
+
 ### Find All Blocked Contacts: 
 Retrieve all contacts that are blocked.
 
+* Request example - 
+```
+GET /contacts/block?pagination=true HTTP/1.1
+```
+This request retrieves all contacts that are marked as blocked in the phone book. 
+Pagination is enabled, so the response will include 10 contacts per page without skipping any contacts.
+Additionally, the response will contain the total count of contacts returned and the total number of pages they have been divided into.
+
 ### Find Contact by ID:
 Retrieve a contact by its unique identifier.
+
+* Request example - 
+```
+GET /contacts/1 HTTP/1.1
+```
+This request fetches a contact with the ID of 1 from the phone book.
+If no contact with this ID exists, an error will be thrown.
+It will first check the cache to see if the data is available. 
+If not, it will search in the database and then store the data in the cache.
 
 ## Prerequisites
 
@@ -193,8 +250,6 @@ $ docker compose down
 ```
 
 This will stop and remove the Docker containers associated with the server application.
-
-
 
 ## Support
 If you encounter any issues or have any questions, please contact zachti@mta.ac.il for assistance.
