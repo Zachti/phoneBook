@@ -7,6 +7,7 @@ import { ListDto } from '../commons/dto/list.dto';
 import { listResponse, paginationResponse } from './interfaces';
 import { SortInput } from '../commons/dto/sort.dto';
 import { ContactRepository } from './contact.repository';
+import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere';
 
 @Injectable()
 export class ContactService {
@@ -112,7 +113,7 @@ export class ContactService {
   }
 
   private createFindOptions(
-    where: any,
+    where: FindOptionsWhere<Contact>[] | FindOptionsWhere<Contact>,
     order: SortInput,
   ): FindManyOptions<Contact> {
     return {
