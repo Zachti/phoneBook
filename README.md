@@ -242,7 +242,13 @@ $ npm run test
 
 ## Postman Collection
 
-You can download the Postman collection for this API [here](https://api.postman.com/collections/31801051-7625d6e3-3544-4377-af53-2532ec8d9925?access_key=PMAT-01HVVG7MHND273PD1RDMGAS693).
+1. Open Postman.
+2. In your workspace, click on the "Import" button located in the top left corner of the window.
+3. Copy the provided link: [Postman Collection](https://api.postman.com/collections/31801051-7625d6e3-3544-4377-af53-2532ec8d9925?access_key=PMAT-01HVVG7MHND273PD1RDMGAS693).
+4. Paste the copied link into the input field.
+5. The Postman collection will be imported into your workspace.
+6. Enjoy testing your API endpoints!
+
 
 ## Accessing the Application
 
