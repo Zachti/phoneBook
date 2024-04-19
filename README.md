@@ -71,6 +71,19 @@ Remove a contact from the phone book.
 ### Find All Contacts: 
 Retrieve all contacts.
 
+request example - 
+```
+GET /contacts?pagination=true HTTP/1.1
+
+{
+  "order": {
+    "key": "lastName"
+  }
+}
+```
+by default the order type will be ascending, will not skip any contacts and will return 10 contacts per page.
+
+
 ### Count All Contacts: 
 Count the total number of contacts.
 
