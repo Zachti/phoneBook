@@ -40,7 +40,7 @@ The application uses Redis cache and MySQL database to store all contact data.
 
 ## Health Endpoint
 
-Additionally, the application provides a /health endpoint to ensure that the database is up and running.
+The application provides a /health endpoint to ensure that the database is up and running.
 
 ## Service API
 
