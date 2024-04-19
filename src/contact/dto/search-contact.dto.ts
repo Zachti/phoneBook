@@ -4,11 +4,11 @@ import { ListDto } from '../../commons/dto/list.dto';
 
 export class SearchContactDto {
   @ValidName()
-  firstName: string;
+  firstName?: string;
 
   @ValidName()
-  lastName: string;
+  lastName?: string;
 
   @IsOptional()
-  listDto: ListDto;
+  listDto?: ListDto;
 }

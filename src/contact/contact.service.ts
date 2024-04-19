@@ -94,7 +94,11 @@ export class ContactService {
     count: number,
     pagination: boolean,
   ): paginationResponse | listResponse {
-    if (!pagination) return { contacts, count };
+    if (!pagination) {
+      if (skip > count) return { contacts: [], count: 0 };
+      const end = Math.min(count - skip, take);
+      return { contacts: contacts.slice(skip, end + 1), count: end - skip + 1 };
+    }
     if (skip > count)
       return { paginatedContacts: [], totalPages: 0, totalContacts: 0 };
     const totalContacts = count - skip;

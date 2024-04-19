@@ -39,10 +39,10 @@ export class ContactRepository extends Repository<Contact> {
     this.logger.debug(
       `trying to delete contact ${JSON.stringify(contact)} from DB.`,
     );
-    const count = await super.remove(contact);
+    await super.remove(contact);
     await this.cacheManager.remove(`${id}`);
     this.logger.debug(
-      `The number of contacts in the DB after contact name: ${contact.firstName} ${contact.lastName} deleted is: ${count}`,
+      `contact: ${contact.firstName} ${contact.lastName} deleted from DB.`,
     );
     return contact;
   }
