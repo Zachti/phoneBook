@@ -1,15 +1,18 @@
-import { IsOptional } from 'class-validator';
+import { IsNumber, IsOptional, ValidateNested } from 'class-validator';
 import { SortInput } from './sort.dto';
-import { IsSortInput } from '../validators/isSortInput.validator';
+import { Type } from 'class-transformer';
 
 export class ListDto {
+  @IsNumber()
   @IsOptional()
   skip?: number;
 
+  @IsNumber()
   @IsOptional()
   take?: number;
 
-  @IsSortInput()
+  @ValidateNested()
+  @Type(() => SortInput)
   @IsOptional()
   order?: SortInput;
 }

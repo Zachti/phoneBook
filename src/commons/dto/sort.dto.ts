@@ -2,7 +2,7 @@ import { IsEnum, IsOptional } from 'class-validator';
 import { SortKeys, SortType } from '../enums/enums';
 
 export class SortInput {
-  @IsEnum(SortType)
+  @IsEnum(SortKeys)
   @IsOptional()
   key?: SortKeys;
 

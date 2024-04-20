@@ -4,46 +4,46 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
-  IsUrl,
 } from 'class-validator';
 import { ValidPhoneNumber } from '../validators/phoneNumber.validator';
 import { ValidName } from '../validators/name.validator';
+import { IsImageUrl } from '../validators/isImageUrl.validator';
 
 export class CreateContactDto {
-  @IsNotEmpty()
   @ValidName()
+  @IsNotEmpty()
   firstName: string;
 
   @ValidName()
   @IsOptional()
   lastName?: string;
 
-  @IsNotEmpty()
-  @IsString()
   @ValidPhoneNumber()
+  @IsString()
+  @IsNotEmpty()
   phoneNumber: string;
 
-  @IsOptional()
   @IsString()
+  @IsOptional()
   address?: string;
 
-  @IsOptional()
   @IsBoolean()
+  @IsOptional()
   isFavorite?: boolean;
 
-  @IsOptional()
   @IsBoolean()
+  @IsOptional()
   isBlocked?: boolean;
 
+  @IsImageUrl()
   @IsOptional()
-  @IsUrl()
   imageUrl?: string;
 
-  @IsOptional()
   @IsEmail({}, { message: 'Invalid email format' })
+  @IsOptional()
   email?: string;
 
-  @IsOptional()
   @IsString()
+  @IsOptional()
   notes?: string;
 }
