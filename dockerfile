@@ -16,4 +16,4 @@ COPY --from=builder /home/node/dist/ /home/app/dist/
 
 RUN apk --no-cache add curl
 
-CMD ["sh", "-c",, "node dist/main.js"]
+CMD ["sh", "-c", "node dist/main.js"]
