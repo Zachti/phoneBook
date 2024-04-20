@@ -24,6 +24,7 @@ export const contacts = [
     address: '789 Oak St',
     isFavorite: true,
     imageUrl: 'https://example.com/image3.jpg',
+    notes: 'Met at the conference last week.',
   },
   {
     firstName: 'Bob',
@@ -50,6 +51,7 @@ export const contacts = [
     address: '789 Elm St',
     isFavorite: false,
     imageUrl: 'https://example.com/image6.jpg',
+    notes: 'Sent follow-up email regarding project details.',
   },
   {
     firstName: 'William',
@@ -58,6 +60,7 @@ export const contacts = [
     address: '123 Oak St',
     isFavorite: true,
     imageUrl: 'https://example.com/image7.jpg',
+    notes: 'Scheduled meeting for next Monday.',
   },
   {
     firstName: 'Olivia',
@@ -66,6 +69,7 @@ export const contacts = [
     address: '321 Cedar St',
     isFavorite: false,
     imageUrl: 'https://example.com/image8.jpg',
+    notes: 'Discussed new marketing strategy.',
   },
   {
     firstName: 'James',
@@ -74,6 +78,7 @@ export const contacts = [
     address: '456 Birch St',
     isFavorite: true,
     imageUrl: 'https://example.com/image9.jpg',
+    notes: 'Received feedback from client.',
   },
   {
     firstName: 'Sophia',
@@ -82,6 +87,7 @@ export const contacts = [
     address: '789 Pine St',
     isFavorite: false,
     imageUrl: 'https://example.com/image10.jpg',
+    notes: 'Sent proposal for new project.',
   },
   {
     firstName: 'David',
@@ -90,6 +96,7 @@ export const contacts = [
     address: '789 Cedar St',
     isFavorite: true,
     imageUrl: 'https://example.com/image11.jpg',
+    notes: 'Completed training session.',
   },
   {
     firstName: 'Emma',
@@ -116,6 +123,7 @@ export const contacts = [
     address: '456 Oak St',
     isFavorite: false,
     imageUrl: 'https://example.com/image14.jpg',
+    notes: 'Shared presentation slides with team.',
   },
   {
     firstName: 'Ethan',
@@ -125,6 +133,7 @@ export const contacts = [
     isFavorite: true,
     imageUrl: 'https://example.com/image15.jpg',
     email: 'Ethan.Lopez@example.com',
+    notes: 'Received positive feedback from manager.',
   },
   {
     firstName: 'Madison',
@@ -142,6 +151,7 @@ export const contacts = [
     address: '123 Pine St',
     isFavorite: true,
     imageUrl: 'https://example.com/image17.jpg',
+    notes: 'Attended networking event.',
   },
   {
     firstName: 'Noah',
@@ -150,6 +160,7 @@ export const contacts = [
     address: '456 Birch St',
     isFavorite: false,
     imageUrl: 'https://example.com/image18.jpg',
+    notes: 'Met with potential client.',
   },
   {
     firstName: 'Mia',
@@ -158,6 +169,7 @@ export const contacts = [
     address: '789 Cedar St',
     isFavorite: true,
     imageUrl: 'https://example.com/image19.jpg',
+    notes: 'Reviewed project requirements.',
   },
   {
     firstName: 'Liam',
@@ -166,6 +178,7 @@ export const contacts = [
     address: '123 Elm St',
     isFavorite: false,
     imageUrl: 'https://example.com/image20.jpg',
+    notes: 'Reviewed latest quarterly report.',
   },
   {
     firstName: 'Isabella',
