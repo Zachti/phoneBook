@@ -21,7 +21,7 @@ export class ValidatePhoneNumberConstraint
           'Phone number starting with "+" should be 13 characters long.',
         );
       }
-    } else if (value.startsWith('0')) {
+    } else if (value.startsWith('05')) {
       if (value.length !== 10) {
         throw new BadRequestException(
           'Phone number starting with "0" should be 10 characters long.',

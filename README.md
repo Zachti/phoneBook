@@ -99,7 +99,7 @@ The rest of the fields, if not obtained from the client, will be set to null.
 The firstName and phoneNumber fields are required. Without them, the request will fail.
 
 It's important to note that the phoneNumber field must be a string and not a number.
-Additionally, it must start with "0" or "+". If it starts with "0", the length must be 10 characters, otherwise, it must be 13 characters.
+Additionally, it must start with "05" or "+". If it starts with "05", the length must be 10 characters, otherwise, it must be 13 characters.
 
 If the phone number already exists in the phone book, the request will fail.
 
