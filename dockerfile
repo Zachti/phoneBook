@@ -10,7 +10,7 @@ FROM node:18.16.1-alpine as phonebook
 
 WORKDIR /home/app
 
-COPY --from=builder /home/node/dist/apps/wolverine/wolverine-api/package*.json /home/app/
+COPY --from=builder /home/node/dist/package*.json /home/app/
 
 COPY --from=builder /home/node/dist/ /home/app/dist/
 
