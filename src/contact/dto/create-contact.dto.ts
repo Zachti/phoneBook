@@ -40,7 +40,7 @@ export class CreateContactDto {
   imageUrl?: string;
 
   @IsOptional()
-  @IsEmail()
+  @IsEmail({}, { message: 'Invalid email format' })
   email?: string;
 
   @IsOptional()

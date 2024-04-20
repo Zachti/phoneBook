@@ -24,12 +24,12 @@ export class ValidatePhoneNumberConstraint
     } else if (value.startsWith('05')) {
       if (value.length !== 10) {
         throw new BadRequestException(
-          'Phone number starting with "0" should be 10 characters long.',
+          'Phone number starting with "05" should be 10 characters long.',
         );
       }
     } else {
       throw new BadRequestException(
-        'Invalid phone number format. It should start with "+" or "0".',
+        'Invalid phone number format. It should start with "+" or "05".',
       );
     }
 

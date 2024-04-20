@@ -1,5 +1,6 @@
 import { IsOptional } from 'class-validator';
 import { SortInput } from './sort.dto';
+import { IsSortInput } from '../validators/isSortInput.validator';
 
 export class ListDto {
   @IsOptional()
@@ -8,6 +9,7 @@ export class ListDto {
   @IsOptional()
   take?: number;
 
+  @IsSortInput()
   @IsOptional()
   order?: SortInput;
 }
